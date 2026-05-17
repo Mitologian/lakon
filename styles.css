@@ -1083,3 +1083,33 @@ ul, ol { list-style: none; }
   .result-name { font-size: 24px; }
   .dim-row { grid-template-columns: 90px 1fr 50px; }
 }
+
+/* ── Nuansa Watak grid ── */
+.nuansa-watak-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.nw-item { display: grid; grid-template-columns: 130px 1fr 55px; align-items: center; gap: 12px; }
+.nw-label { font-size: 13px; font-weight: 600; color: var(--ink); text-align: right; }
+.nw-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.nw-fill  { height: 100%; border-radius: 4px; background: var(--sage); }
+.nw-pct   { font-size: 12px; font-weight: 700; color: var(--sage); }
+
+/* ── Rtag color variants ── */
+.rtag-amber  { background: var(--amber); }
+.rtag-sage   { background: var(--sage); }
+.rtag-yasa   { background: var(--yasa); }
+.rtag-nalar  { background: var(--nalar); }
+.rtag-karsa  { background: var(--karsa); }
+.rtag-tata   { background: var(--tata); }
+.rtag-grey   { background: var(--mid); }
+.rtag-nuance { background: transparent; color: var(--mid); border: 1.5px solid var(--border); }
+
+@media (max-width: 768px) {
+  .nw-item { grid-template-columns: 100px 1fr 50px; gap: 8px; }
+  .nw-label { font-size: 12px; }
+}
+
+/* Result section sub-label (e.g. "Skill yang perlu dikembangkan:") */
+.result-section-sub {
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--sage); margin: .75rem 0 .5rem;
+}
