@@ -9,7 +9,7 @@
    - Email notification to participant on submit
 ═══════════════════════════════════════════════════════════════ */
 
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZ4Yez1bc5K-COQCgCnqZWJGwHm6vx2n9tmyd25kBO9PcjqG6y1orDVxbRh64vysFv/exec";
 
 let lang        = 'id';
 let currentPage = 0;
