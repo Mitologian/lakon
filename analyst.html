@@ -34,10 +34,12 @@ a{text-decoration:none;color:inherit}
    LOGIN SCREEN
 ══════════════════════════════ */
 #screen-login{
-  display:flex;align-items:center;justify-content:center;
+  align-items:center;justify-content:center;
   background:var(--amber);min-height:100vh;
   position:relative;overflow:hidden;
 }
+/* When active, override block with flex for centering */
+#screen-login.active{display:flex}
 #screen-login::before{
   content:'';position:absolute;inset:0;
   background-image:radial-gradient(circle at 20% 50%,rgba(255,255,255,.06) 0%,transparent 50%),
@@ -552,7 +554,7 @@ a{text-decoration:none;color:inherit}
 // CONFIG — ubah sesuai deployment kamu
 // ══════════════════════════════════════════════════════════
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZ4Yez1bc5K-COQCgCnqZWJGwHm6vx2n9tmyd25kBO9PcjqG6y1orDVxbRh64vysFv/exec";
-const ADMIN_PASSWORD  = "K3naliP3ranmu2026!";  // ← GANTI sebelum deploy
+const ADMIN_PASSWORD  = "lakon2026";  // ← GANTI sebelum deploy
 
 // ══════════════════════════════════════════════════════════
 // STATE
