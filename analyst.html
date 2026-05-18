@@ -34,10 +34,11 @@ a{text-decoration:none;color:inherit}
    LOGIN SCREEN
 ══════════════════════════════ */
 #screen-login{
-  display:flex;align-items:center;justify-content:center;
+  align-items:center;justify-content:center;
   background:var(--amber);min-height:100vh;
   position:relative;overflow:hidden;
 }
+#screen-login.active{display:flex}
 #screen-login::before{
   content:'';position:absolute;inset:0;
   background-image:radial-gradient(circle at 20% 50%,rgba(255,255,255,.06) 0%,transparent 50%),
