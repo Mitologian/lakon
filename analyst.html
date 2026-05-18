@@ -34,12 +34,10 @@ a{text-decoration:none;color:inherit}
    LOGIN SCREEN
 ══════════════════════════════ */
 #screen-login{
-  align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   background:var(--amber);min-height:100vh;
   position:relative;overflow:hidden;
 }
-/* When active, override block with flex for centering */
-#screen-login.active{display:flex}
 #screen-login::before{
   content:'';position:absolute;inset:0;
   background-image:radial-gradient(circle at 20% 50%,rgba(255,255,255,.06) 0%,transparent 50%),
@@ -1248,13 +1246,13 @@ function renderBar(elId, entries, colorMap) {
     const pct   = Math.round(n/allRows.length*100);
     const color = colorMap[k] || '#B0A088';
     const w     = Math.round(n/max*100);
-    return \`<div style="display:grid;grid-template-columns:80px 1fr 40px;align-items:center;gap:8px;margin-bottom:8px">
-      <div style="font-size:12px;font-weight:600;color:var(--ink);text-align:right">\${k}</div>
-      <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-        <div style="height:100%;width:\${w}%;background:\${color};border-radius:4px;transition:width .4s"></div>
-      </div>
-      <div style="font-size:11px;font-weight:700;color:\${color}">\${n} <span style="color:var(--light);font-weight:400">(\${pct}%)</span></div>
-    </div>\`;
+    return '<div style="display:grid;grid-template-columns:80px 1fr 40px;align-items:center;gap:8px;margin-bottom:8px">'
+      + '<div style="font-size:12px;font-weight:600;color:var(--ink);text-align:right">' + k + '</div>'
+      + '<div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">'
+      + '<div style="height:100%;width:' + w + '%;background:' + color + ';border-radius:4px;transition:width .4s"></div>'
+      + '</div>'
+      + '<div style="font-size:11px;font-weight:700;color:' + color + '">' + n + ' <span style="color:var(--light);font-weight:400">(' + pct + '%)</span></div>'
+      + '</div>';
   }).join('');
 }
 
