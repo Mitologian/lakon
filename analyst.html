@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lakon™ Analyst</title>
-<link rel="icon" type="image/png" href="images/lakon-favicon.png">
-<link rel="apple-touch-icon" href="images/lakon-favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
 <style>
@@ -36,10 +34,11 @@ a{text-decoration:none;color:inherit}
    LOGIN SCREEN
 ══════════════════════════════ */
 #screen-login{
-  display:flex;align-items:center;justify-content:center;
+  align-items:center;justify-content:center;
   background:var(--amber);min-height:100vh;
   position:relative;overflow:hidden;
 }
+#screen-login.active{display:flex}
 #screen-login::before{
   content:'';position:absolute;inset:0;
   background-image:radial-gradient(circle at 20% 50%,rgba(255,255,255,.06) 0%,transparent 50%),
@@ -388,35 +387,22 @@ a{text-decoration:none;color:inherit}
    PRINT STYLES
 ══════════════════════════════ */
 @media print {
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  body { background:#fff !important; font-size:11pt; }
-  .app-nav, .modal-nav, .filters-bar, .stats-strip,
-  #breakdown-row, .table-wrap, .btn-print, .btn-close,
-  .modal-overlay > *:not(.modal) { display:none !important }
-  #screen-app, #screen-login { display:none !important }
-  .modal-overlay {
-    position:static !important; background:none !important;
-    padding:0 !important; display:block !important;
-    overflow:visible !important;
+  body{background:#fff !important}
+  .app-nav,.modal-nav,.modal-overlay > *:not(.modal){display:none !important}
+  .modal-overlay{
+    position:static !important;background:none !important;
+    padding:0 !important;display:block !important;
   }
-  .modal {
-    border-radius:0 !important; box-shadow:none !important;
-    max-width:100% !important; width:100% !important;
-    background:#fff !important;
+  .modal{
+    border-radius:0 !important;box-shadow:none !important;
+    max-width:100% !important;
   }
-  .report-body { padding:0 !important }
-  .report-header {
-    border-radius:6px !important;
-    padding:1.5rem !important;
-    margin-bottom:1rem !important;
-    page-break-inside: avoid;
-  }
-  .report-meta { margin-bottom:1rem !important }
-  .report-section { break-inside:avoid; margin-bottom:1.25rem !important }
-  .report-2col { display:grid !important; grid-template-columns:1fr 1fr !important; gap:1rem !important }
-  .rpt-graph-row { grid-template-columns:120px 1fr 44px !important }
-  .rpt-dim-row   { grid-template-columns:100px 1fr 44px !important }
-  @page { margin:1.5cm; size:A4 }
+  .report-body{padding:1.5rem !important}
+  .report-header{border-radius:8px !important}
+  .report-section{break-inside:avoid}
+  #screen-app,#screen-login{display:none !important}
+  .modal-overlay{display:block !important}
+  @page{margin:1.5cm;size:A4}
 }
 
 /* ══════════════════════════════
@@ -552,7 +538,7 @@ a{text-decoration:none;color:inherit}
     <div class="modal-nav">
       <div class="modal-nav-title" id="modal-nav-title">Report</div>
       <button class="btn-print" onclick="window.print()">
-        ⬇ Simpan PDF
+        <span>⎙</span> Print / PDF
       </button>
       <button class="btn-close" onclick="closeModal()">✕</button>
     </div>
@@ -567,7 +553,7 @@ a{text-decoration:none;color:inherit}
 // CONFIG — ubah sesuai deployment kamu
 // ══════════════════════════════════════════════════════════
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZ4Yez1bc5K-COQCgCnqZWJGwHm6vx2n9tmyd25kBO9PcjqG6y1orDVxbRh64vysFv/exec";
-const ADMIN_PASSWORD  = "P3ranmu2026!";  // ← GANTI sebelum deploy
+const ADMIN_PASSWORD  = "lakon2026";  // ← GANTI sebelum deploy
 
 // ══════════════════════════════════════════════════════════
 // STATE
@@ -791,9 +777,6 @@ async function loadData() {
 // FILTERS & TABLE
 // ══════════════════════════════════════════════════════════
 function buildFilters() {
-  allRows.forEach(r => {
-    if (r.batch_id && r.batch_id.toLowerCase() === 'general') r.batch_id = 'General';
-  });
   const batches   = [...new Set(allRows.map(r=>r.batch_id).filter(Boolean))].sort();
   const companies = [...new Set(allRows.map(r=>r.participant_company).filter(Boolean))].sort();
 
@@ -823,7 +806,6 @@ function applyFilters() {
   });
 
   renderTable();
-  updateStats();
 }
 
 function clearFilters() {
@@ -893,16 +875,20 @@ function renderTable() {
 
 function updateStats() {
   renderCharts();
-  const rows = filteredRows.length ? filteredRows : allRows;
-  const total     = rows.length;
-  const batches   = new Set(rows.map(r=>r.batch_id).filter(Boolean)).size;
-  const companies = new Set(rows.map(r=>r.participant_company).filter(Boolean)).size;
-  const kelCount  = {};
-  rows.forEach(r=>{ if(r.kelompok_best_fit) kelCount[r.kelompok_best_fit]=(kelCount[r.kelompok_best_fit]||0)+1; });
+  const total = allRows.length;
+  const batches   = new Set(allRows.map(r=>r.batch_id).filter(Boolean)).size;
+  const companies = new Set(allRows.map(r=>r.participant_company).filter(Boolean)).size;
+
+  // Top kelompok
+  const kelCount = {};
+  allRows.forEach(r=>{ if(r.kelompok_best_fit) kelCount[r.kelompok_best_fit]=(kelCount[r.kelompok_best_fit]||0)+1; });
   const topKel = Object.entries(kelCount).sort((a,b)=>b[1]-a[1])[0];
-  const watCount  = {};
-  rows.forEach(r=>{ if(r.watak) watCount[r.watak]=(watCount[r.watak]||0)+1; });
+
+  // Top watak
+  const watCount = {};
+  allRows.forEach(r=>{ if(r.watak) watCount[r.watak]=(watCount[r.watak]||0)+1; });
   const topWat = Object.entries(watCount).sort((a,b)=>b[1]-a[1])[0];
+
   document.getElementById('stat-total').textContent   = total;
   document.getElementById('stat-batch').textContent   = batches;
   document.getElementById('stat-company').textContent = companies;
