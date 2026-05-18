@@ -1260,13 +1260,13 @@ function renderBar(elId, entries, colorMap) {
     const pct   = Math.round(n/allRows.length*100);
     const color = colorMap[k] || '#B0A088';
     const w     = Math.round(n/max*100);
-    return `<div style="display:grid;grid-template-columns:80px 1fr 40px;align-items:center;gap:8px;margin-bottom:8px">
-      <div style="font-size:12px;font-weight:600;color:var(--ink);text-align:right">\${k}</div>
-      <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
-        <div style="height:100%;width:\${w}%;background:\${color};border-radius:4px;transition:width .4s"></div>
-      </div>
-      <div style="font-size:11px;font-weight:700;color:\${color}">\${n} <span style="color:var(--light);font-weight:400">(\${pct}%)</span></div>
-    </div>`;
+    return '<div style="display:grid;grid-template-columns:80px 1fr 40px;align-items:center;gap:8px;margin-bottom:8px">'
+      + '<div style="font-size:12px;font-weight:600;color:var(--ink);text-align:right">' + k + '</div>'
+      + '<div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">'
+      + '<div style="height:100%;width:' + w + '%;background:' + color + ';border-radius:4px;transition:width .4s"></div>'
+      + '</div>'
+      + '<div style="font-size:11px;font-weight:700;color:' + color + '">' + n + ' <span style="color:var(--light);font-weight:400">(' + pct + '%)</span></div>'
+      + '</div>';
   }).join('');
 }
 
