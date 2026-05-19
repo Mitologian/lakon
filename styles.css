@@ -1084,9 +1084,18 @@ ul, ol { list-style: none; }
   .dim-row { grid-template-columns: 90px 1fr 50px; }
 }
 
-/* ── Nuansa Watak ── */
+/* ── Rtag tambahan ── */
+.rtag-tata   { background: var(--tata); color: #fff; }
+
+/* ── Rtag nuance — outline only ── */
+.rtag-nuance {
+  background: transparent;
+  color: var(--mid);
+  border: 1.5px solid var(--border);
+}
+
+/* ── Nuansa Watak bars ── */
 .nuansa-watak-grid { display: flex; flex-direction: column; gap: 1.25rem; }
-.nw-item { }
 .nw-bar-row {
   display: grid; grid-template-columns: 130px 1fr 55px;
   align-items: center; gap: 10px; margin-bottom: 6px;
@@ -1097,18 +1106,7 @@ ul, ol { list-style: none; }
 .nw-pct   { font-size: 12px; font-weight: 700; color: var(--sage); }
 .nw-desc  { font-size: 13px; color: var(--mid); line-height: 1.6; padding-left: 140px; }
 
-/* ── Rtag nuance — outline only, not filled ── */
-.rtag-nuance {
-  background: transparent;
-  color: var(--mid);
-  border: 1.5px solid var(--border);
-}
-.rtag-yasa  { background: var(--yasa); }
-.rtag-nalar { background: var(--nalar); }
-.rtag-karsa { background: var(--karsa); }
-.rtag-tata  { background: var(--tata); }
-
-/* ── result-section-sub label ── */
+/* ── Result section sub-label ── */
 .result-section-sub {
   font-size: 11px; font-weight: 700;
   text-transform: uppercase; letter-spacing: .1em;

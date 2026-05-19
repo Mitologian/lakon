@@ -123,7 +123,7 @@ const PARAGA = {
     tags:["Karya","Bakti","Karsa","Watak Reka"],
     tagClasses:["rtag-orange","rtag-teal","rtag-sage","rtag-grey"],
     overview:{
-      id:"Mereka tidak sekadar membuat sesuatu — mereka membuat sesuatu menjadi bermakna. Di ruang manapun mereka masuk, ada energi yang berubah: percakapan menjadi lebih dalam, ide-ide yang tadinya terasa abstrak tiba-tiba punya bentuk dan arah. Mereka adalah orang yang melihat audiens sebelum melihat kanvas, dan itulah yang membuat karyanya selalu tepat sasaran.",
+      id:"Ia tidak sekadar membuat sesuatu — ia membuat sesuatu menjadi bermakna. Di ruang manapun ia masuk, ada energi yang berubah: percakapan menjadi lebih dalam, ide-ide yang tadinya terasa abstrak tiba-tiba punya bentuk dan arah. Ia adalah orang yang melihat audiens sebelum melihat kanvas, dan itulah yang membuat karyanya selalu tepat sasaran.",
       en:"They don't just make things — they make things mean something. In any room they enter, something shifts: conversations go deeper, ideas that felt abstract suddenly have shape and direction. They see the audience before they see the canvas, and that's what makes their work always land."},
     kekuatan:{
       id:["Menerjemahkan visi abstrak menjadi cerita yang bisa dirasakan orang","Memimpin proyek kreatif dengan kepekaan dan arah yang jelas","Membangun koneksi antara karya dan audiens yang paling dalam"],
@@ -137,7 +137,7 @@ const PARAGA = {
     tags:["Karya","Nalar","Watak Logika"],
     tagClasses:["rtag-orange","rtag-teal","rtag-grey"],
     overview:{
-      id:"Di balik setiap karya yang mereka hasilkan, ada sistem yang solid. Mereka bukan hanya seniman — mereka adalah perancang sistem kreatif. Ketika orang lain melihat sebuah desain yang indah, mereka melihat framework yang bisa direplikasi, proses yang bisa dioptimasi, dan potensi yang bisa diskalakan.",
+      id:"Di balik setiap karya yang ia hasilkan, ada sistem yang solid. Ia bukan hanya seniman — ia adalah perancang sistem kreatif. Ketika orang lain melihat sebuah desain yang indah, ia melihat framework yang bisa direplikasi, proses yang bisa dioptimasi, dan potensi yang bisa diskalakan.",
       en:"Behind every work they produce, there's a solid system. They're not just an artist — they're a designer of creative systems. When others see a beautiful design, they see a replicable framework, an optimizable process, and scalable potential."},
     kekuatan:{
       id:["Membangun sistem dan framework kreatif yang bisa direplikasi","Menganalisis tren estetika dan mengantisipasi arah selanjutnya","Mengintegrasikan data dan intuisi kreatif dalam satu keputusan desain"],
@@ -151,7 +151,7 @@ const PARAGA = {
     tags:["Karya","Tata","Watak Jaga"],
     tagClasses:["rtag-orange","rtag-sage","rtag-grey"],
     overview:{
-      id:"Mereka tidak menunggu inspirasi — mereka datang tepat waktu, duduk di tempat kerja, dan mulai bekerja. Di industri yang penuh dengan kreator yang mengandalkan mood, mereka adalah anomali yang paling berharga: seseorang yang menghasilkan kualitas tinggi secara konsisten, hari demi hari, tanpa drama.",
+      id:"Ia tidak menunggu inspirasi — ia datang tepat waktu, duduk di tempat kerja, dan mulai bekerja. Di industri yang penuh dengan kreator yang mengandalkan mood, ia adalah anomali yang paling berharga: seseorang yang menghasilkan kualitas tinggi secara konsisten, hari demi hari, tanpa drama.",
       en:"They don't wait for inspiration — they show up on time, sit at their workspace, and start working. In an industry full of mood-dependent creators, they're the most valuable anomaly: someone who delivers high quality consistently, day after day, without drama."},
     kekuatan:{
       id:["Menghasilkan karya berkualitas tinggi dengan konsistensi yang jarang dimiliki kreator lain","Menguasai teknik dan tools kreatif sampai ke tingkat yang paling dalam","Memenuhi deadline kreatif tanpa mengorbankan kualitas"],
@@ -165,7 +165,7 @@ const PARAGA = {
     tags:["Karya","Karsa","Watak Guna"],
     tagClasses:["rtag-orange","rtag-teal","rtag-grey"],
     overview:{
-      id:"Karyanya paling hidup ketika lahir di momen. Mereka adalah improviser sejati — responsif, adaptif, dan paling autentik ketika tidak ada skrip. Di saat kreator lain sedang merencanakan, mereka sudah berkarya. Hasilnya tidak selalu sempurna secara teknis, tapi selalu terasa nyata.",
+      id:"Karyanya paling hidup ketika lahir di momen. Ia adalah improviser sejati — responsif, adaptif, dan paling autentik ketika tidak ada skrip. Di saat kreator lain sedang merencanakan, ia sudah berkarya. Hasilnya tidak selalu sempurna secara teknis, tapi selalu terasa nyata.",
       en:"Their work comes most alive when born in the moment. They're a true improviser — responsive, adaptive, and most authentic when there's no script. While other creators are still planning, they're already making. The result isn't always technically perfect, but it always feels real."},
     kekuatan:{
       id:["Menghasilkan karya yang terasa spontan, segar, dan tidak dibuat-buat","Merespons feedback dan kondisi real-time dengan cepat dan natural","Membawa energi dan kehadiran yang nyata ke dalam performa atau presentasi kreatif"],
@@ -181,7 +181,7 @@ const PARAGA = {
     tags:["Bakti","Karya","Watak Reka"],
     tagClasses:["rtag-sage","rtag-orange","rtag-grey"],
     overview:{
-      id:"Mereka melihat potensi di setiap orang bahkan sebelum mereka melihatnya sendiri. Bagi mereka, setiap percakapan adalah kesempatan untuk menemukan apa yang tersembunyi di balik ketidakpastian seseorang. Mereka tidak hanya membantu — mereka melihat, memahami, dan menemani. Dan itulah yang membuat orang-orang kembali padanya.",
+      id:"Ia melihat potensi di setiap orang bahkan sebelum mereka melihatnya sendiri. Bagi ia, setiap percakapan adalah kesempatan untuk menemukan apa yang tersembunyi di balik ketidakpastian seseorang. Ia tidak hanya membantu — ia melihat, memahami, dan menemani. Dan itulah yang membuat orang-orang kembali padanya.",
       en:"They see potential in every person even before those people see it themselves. For them, every conversation is a chance to find what's hidden behind someone's uncertainty. They don't just help — they see, understand, and accompany. And that's what makes people come back to them."},
     kekuatan:{
       id:["Membangun kepercayaan yang mendalam dengan individu yang mereka dampingi","Mendesain program dan intervensi yang menyentuh akar, bukan hanya gejala","Menjaga kehadiran emosional yang penuh bahkan di situasi yang paling berat"],
@@ -195,7 +195,7 @@ const PARAGA = {
     tags:["Bakti","Nalar","Watak Logika"],
     tagClasses:["rtag-sage","rtag-teal","rtag-grey"],
     overview:{
-      id:"Mereka peduli pada orang — tapi cara mereka menunjukkan kepedulian adalah dengan merancang sistem yang membuat pertumbuhan manusia terjadi secara konsisten. Mereka adalah seseorang yang mendekati pengembangan manusia dengan presisi yang sama seperti seorang insinyur mendekati masalah teknis.",
+      id:"Ia peduli pada orang — tapi cara ia menunjukkan kepedulian adalah dengan merancang sistem yang membuat pertumbuhan manusia terjadi secara konsisten. Ia adalah seseorang yang mendekati pengembangan manusia dengan presisi yang sama seperti seorang insinyur mendekati masalah teknis.",
       en:"They care about people — but the way they show that care is by designing systems that make human growth happen consistently. They're someone who approaches human development with the same precision an engineer brings to a technical problem."},
     kekuatan:{
       id:["Merancang sistem people development yang bisa bekerja di skala besar","Menganalisis data SDM untuk menemukan pola dan peluang peningkatan","Membangun framework coaching atau training yang rigorous dan terukur"],
@@ -209,7 +209,7 @@ const PARAGA = {
     tags:["Bakti","Tata","Watak Jaga"],
     tagClasses:["rtag-sage","rtag-plum","rtag-grey"],
     overview:{
-      id:"Mereka tidak glamor dan tidak mencari pengakuan — mereka memastikan sistem berjalan, orang mendapat apa yang mereka butuhkan, dan tidak ada yang terlewat. Di institusi manapun yang melayani manusia, mereka adalah alasan kenapa janji-janji yang dibuat di atas bisa sampai ke bawah.",
+      id:"Ia tidak glamor dan tidak mencari pengakuan — ia memastikan sistem berjalan, orang mendapat apa yang mereka butuhkan, dan tidak ada yang terlewat. Di institusi manapun yang melayani manusia, ia adalah alasan kenapa janji-janji yang dibuat di atas bisa sampai ke bawah.",
       en:"They're not glamorous and don't seek recognition — they make sure systems run, people get what they need, and nothing falls through the cracks. In any institution serving people, they're the reason why promises made at the top actually reach the bottom."},
     kekuatan:{
       id:["Membangun proses layanan yang konsisten dan bisa diandalkan","Memastikan kebutuhan individu terpenuhi di tengah sistem yang besar","Menjaga standar etika dan kualitas layanan di bawah tekanan apapun"],
@@ -223,7 +223,7 @@ const PARAGA = {
     tags:["Bakti","Karsa","Watak Guna"],
     tagClasses:["rtag-sage","rtag-orange","rtag-grey"],
     overview:{
-      id:"Mereka tidak menunggu sistem atau prosedur. Mereka melihat kebutuhan dan langsung bergerak. Di momen krisis, saat yang lain masih mencari formulir, mereka sudah ada di sana — hadir secara fisik, emosional, dan praktis. Kekuatannya bukan di planning jangka panjang, tapi di kehadiran nyata.",
+      id:"Ia tidak menunggu sistem atau prosedur. Ia melihat kebutuhan dan langsung bergerak. Di momen krisis, saat yang lain masih mencari formulir, ia sudah ada di sana — hadir secara fisik, emosional, dan praktis. Kekuatannya bukan di planning jangka panjang, tapi di kehadiran nyata.",
       en:"They don't wait for systems or procedures. They see a need and move. In moments of crisis, while others are still looking for forms, they're already there — physically, emotionally, and practically present. Their strength isn't in long-term planning, but in real presence."},
     kekuatan:{
       id:["Merespons kebutuhan manusia secara langsung dan cepat tanpa birokrasi","Membangun kepercayaan melalui tindakan nyata, bukan kata-kata","Beradaptasi dengan kebutuhan yang berubah-ubah di lapangan"],
@@ -239,7 +239,7 @@ const PARAGA = {
     tags:["Karsa","Karya","Watak Reka"],
     tagClasses:["rtag-plum","rtag-orange","rtag-grey"],
     overview:{
-      id:"Mereka memimpin dengan cerita dan visi, bukan dengan jabatan. Orang mengikutinya bukan karena harus, tapi karena mereka merasakan bahwa ada sesuatu yang lebih besar dari diri mereka sendiri di balik apa yang mereka bangun. Mereka tidak membuat organisasi — mereka membuat gerakan.",
+      id:"Ia memimpin dengan cerita dan visi, bukan dengan jabatan. Orang mengikutinya bukan karena harus, tapi karena mereka merasakan bahwa ada sesuatu yang lebih besar dari diri mereka sendiri di balik apa yang ia bangun. Ia tidak membuat organisasi — ia membuat gerakan.",
       en:"They lead through story and vision, not title. People follow them not because they have to, but because they sense there's something larger than themselves behind what's being built. They don't make organizations — they make movements."},
     kekuatan:{
       id:["Membangun narasi dan visi yang menginspirasi dan menggerakkan orang","Melihat peluang di tempat yang belum dilihat orang lain","Memimpin transformasi budaya organisasi atau komunitas"],
@@ -253,7 +253,7 @@ const PARAGA = {
     tags:["Karsa","Nalar","Watak Logika"],
     tagClasses:["rtag-plum","rtag-teal","rtag-grey"],
     overview:{
-      id:"Mereka adalah kombinasi yang paling langka dan paling dicari: seseorang yang bisa melihat gambaran besar sekaligus membangun mesin yang mewujudkannya. Ketika pemimpin lain berhenti di visi, mereka sudah merancang sistem eksekusinya. Ketika analis lain berhenti di data, mereka sudah bergerak.",
+      id:"Ia adalah kombinasi yang paling langka dan paling dicari: seseorang yang bisa melihat gambaran besar sekaligus membangun mesin yang mewujudkannya. Ketika pemimpin lain berhenti di visi, ia sudah merancang sistem eksekusinya. Ketika analis lain berhenti di data, ia sudah bergerak.",
       en:"They're the rarest and most sought-after combination: someone who can see the big picture and simultaneously build the machine that realizes it. When other leaders stop at vision, they're already designing the execution system. When other analysts stop at data, they're already moving."},
     kekuatan:{
       id:["Mengintegrasikan visi jangka panjang dengan eksekusi jangka pendek","Membangun organisasi yang skalabel dan berprestasi tinggi","Mengambil keputusan sulit dengan kepala dingin di bawah tekanan"],
@@ -267,7 +267,7 @@ const PARAGA = {
     tags:["Karsa","Tata","Watak Jaga"],
     tagClasses:["rtag-plum","rtag-sage","rtag-grey"],
     overview:{
-      id:"Mereka memimpin untuk jangka panjang. Bukan spotlight yang mereka kejar, tapi warisan. Setiap keputusan yang mereka buat mempertimbangkan satu pertanyaan: apakah ini akan membuat institusi ini lebih kuat lima tahun dari sekarang? Mereka adalah alasan organisasi bisa bertahan dekade demi dekade.",
+      id:"Ia memimpin untuk jangka panjang. Bukan spotlight yang ia kejar, tapi warisan. Setiap keputusan yang ia buat mempertimbangkan satu pertanyaan: apakah ini akan membuat institusi ini lebih kuat lima tahun dari sekarang? Ia adalah alasan organisasi bisa bertahan dekade demi dekade.",
       en:"They lead for the long term. Not the spotlight they're after, but the legacy. Every decision they make considers one question: will this make the institution stronger five years from now? They're the reason organizations can survive decade after decade."},
     kekuatan:{
       id:["Membangun sistem tata kelola dan akuntabilitas yang kokoh","Menjaga konsistensi nilai dan standar organisasi di tengah tekanan perubahan","Mengembangkan pemimpin generasi berikutnya secara sistematis"],
@@ -281,7 +281,7 @@ const PARAGA = {
     tags:["Karsa","Bakti","Watak Guna"],
     tagClasses:["rtag-plum","rtag-sage","rtag-grey"],
     overview:{
-      id:"Mereka memimpin dan mempengaruhi melalui koneksi manusia yang genuine. Mereka tidak menggunakan teknik persuasi yang dipelajari — mereka menggunakan kehadiran nyata, energi yang tulus, dan kemampuan membaca orang yang hampir instingtif. Deal terbaik tidak terjadi di meja — mereka yang membuatnya terjadi sebelum itu.",
+      id:"Ia memimpin dan mempengaruhi melalui koneksi manusia yang genuine. Ia tidak menggunakan teknik persuasi yang dipelajari — ia menggunakan kehadiran nyata, energi yang tulus, dan kemampuan membaca orang yang hampir instingtif. Deal terbaik tidak terjadi di meja — ia yang membuatnya terjadi sebelum itu.",
       en:"They lead and influence through genuine human connection. They don't use learned persuasion techniques — they use real presence, genuine energy, and an almost instinctive ability to read people. The best deals don't happen at the table — they're the one who makes them happen before that."},
     kekuatan:{
       id:["Membangun jaringan dan relasi bisnis yang kuat dan tahan lama","Membaca situasi dan orang dengan cepat dan akurat","Menggerakkan deal atau keputusan melalui kepercayaan personal"],
@@ -297,7 +297,7 @@ const PARAGA = {
     tags:["Nalar","Bakti","Watak Reka"],
     tagClasses:["rtag-teal","rtag-sage","rtag-grey"],
     overview:{
-      id:"Mereka adalah peneliti yang tidak pernah puas dengan jawaban yang hanya menjawab 'bagaimana'. Mereka menggali lebih dalam — mencari makna, implikasi, dan dampak pada manusia di balik setiap data. Temuan mereka bukan sekadar angka: ini adalah cerita yang menunggu untuk diceritakan kepada dunia.",
+      id:"Ia adalah peneliti yang tidak pernah puas dengan jawaban yang hanya menjawab 'bagaimana'. Ia menggali lebih dalam — mencari makna, implikasi, dan dampak pada manusia di balik setiap data. Temuan ia bukan sekadar angka: ini adalah cerita yang menunggu untuk diceritakan kepada dunia.",
       en:"They're a researcher never satisfied with answers that only address 'how'. They dig deeper — seeking the meaning, implications, and human impact behind every piece of data. Their findings aren't just numbers: they're stories waiting to be told to the world."},
     kekuatan:{
       id:["Menemukan makna yang tersembunyi di balik data dan pola","Mengkomunikasikan insight kompleks dengan cara yang menyentuh orang","Menghubungkan riset dengan dampak manusia yang nyata"],
@@ -311,7 +311,7 @@ const PARAGA = {
     tags:["Nalar","Tata","Watak Logika"],
     tagClasses:["rtag-teal","rtag-plum","rtag-grey"],
     overview:{
-      id:"Mereka adalah arketipe peneliti klasik: seseorang yang mendedikasikan kemampuan kognitifnya untuk memahami bagaimana dunia benar-benar bekerja. Mereka tidak tertarik pada kebenaran yang nyaman — mereka tertarik pada kebenaran yang akurat. Di tangannya, data bukan angka: ini adalah argumen.",
+      id:"Ia adalah arketipe peneliti klasik: seseorang yang mendedikasikan kemampuan kognitifnya untuk memahami bagaimana dunia benar-benar bekerja. Ia tidak tertarik pada kebenaran yang nyaman — ia tertarik pada kebenaran yang akurat. Di tangannya, data bukan angka: ini adalah argumen.",
       en:"They're the classic researcher archetype: someone who dedicates their cognitive abilities to understanding how the world actually works. They're not interested in comfortable truths — they're interested in accurate truths. In their hands, data isn't just numbers: it's an argument."},
     kekuatan:{
       id:["Membangun kerangka analisis yang rigorous dan defensible","Menemukan pola tersembunyi dalam dataset yang kompleks","Menghasilkan kesimpulan yang tahan terhadap kritik paling tajam sekalipun"],
@@ -325,7 +325,7 @@ const PARAGA = {
     tags:["Nalar","Tata","Watak Jaga"],
     tagClasses:["rtag-teal","rtag-plum","rtag-grey"],
     overview:{
-      id:"Mereka membangun pengetahuan seperti seorang arsitek membangun gedung: dengan fondasi yang kuat, metodologi yang terstruktur, dan tidak ada satu pun bata yang diletakkan sembarangan. Datanya bersih, prosesnya terdokumentasi, hasilnya dapat direproduksi. Mereka adalah penjaga kredibilitas institusi penelitian.",
+      id:"Ia membangun pengetahuan seperti seorang arsitek membangun gedung: dengan fondasi yang kuat, metodologi yang terstruktur, dan tidak ada satu pun bata yang diletakkan sembarangan. Datanya bersih, prosesnya terdokumentasi, hasilnya dapat direproduksi. Ia adalah penjaga kredibilitas institusi penelitian.",
       en:"They build knowledge like an architect builds a building: with a strong foundation, structured methodology, and not a single brick laid carelessly. Their data is clean, their process documented, their results reproducible. They're the guardian of research institution credibility."},
     kekuatan:{
       id:["Menjalankan penelitian dengan standar metodologi yang ketat","Memastikan data collection dan analisis bebas dari bias prosedural","Mendokumentasikan proses riset dengan presisi yang memungkinkan replikasi"],
@@ -339,7 +339,7 @@ const PARAGA = {
     tags:["Nalar","Karsa","Watak Guna"],
     tagClasses:["rtag-teal","rtag-orange","rtag-grey"],
     overview:{
-      id:"Mereka tidak menganalisis untuk kesenangan intelektual — mereka menganalisis karena ada masalah yang perlu dipecahkan. Pendekatannya selalu praktis: apa yang bisa digunakan dari informasi ini? Bagaimana kita menggerakkan ini menjadi sesuatu yang nyata? Insight tanpa aksi baginya terasa seperti pemborosan.",
+      id:"Ia tidak menganalisis untuk kesenangan intelektual — ia menganalisis karena ada masalah yang perlu dipecahkan. Pendekatannya selalu praktis: apa yang bisa digunakan dari informasi ini? Bagaimana kita menggerakkan ini menjadi sesuatu yang nyata? Insight tanpa aksi baginya terasa seperti pemborosan.",
       en:"They don't analyze for intellectual pleasure — they analyze because there's a problem that needs solving. Their approach is always practical: what can be used from this information? How do we turn this into something real? Insight without action feels like waste to them."},
     kekuatan:{
       id:["Mendiagnosis masalah kompleks secara cepat dan tepat","Mengimplementasikan solusi berbasis data tanpa terjebak di analisis yang berlebihan","Bergerak fleksibel antara investigasi dan eksekusi sesuai kebutuhan"],
@@ -355,7 +355,7 @@ const PARAGA = {
     tags:["Yasa","Karya","Watak Reka"],
     tagClasses:["rtag-orange","rtag-teal","rtag-grey"],
     overview:{
-      id:"Mereka adalah perpaduan yang tidak biasa: tertarik pada dunia yang konkret dan terampil, namun memandang setiap proyek melalui lensa makna yang lebih dalam. Mereka bukan sekadar membangun — mereka membangun dengan visi. Setiap hasil kerjanya mengandung pertanyaan: apakah ini benar-benar berarti sesuatu?",
+      id:"Ia adalah perpaduan yang tidak biasa: tertarik pada dunia yang konkret dan terampil, namun memandang setiap proyek melalui lensa makna yang lebih dalam. Ia bukan sekadar membangun — ia membangun dengan visi. Setiap hasil kerjanya mengandung pertanyaan: apakah ini benar-benar berarti sesuatu?",
       en:"They're an unusual combination: drawn to the concrete and skillful world, yet viewing every project through a lens of deeper meaning. They don't just build — they build with vision. Every piece of work they produce carries the question: does this actually mean something?"},
     kekuatan:{
       id:["Menerjemahkan visi abstrak menjadi sesuatu yang nyata dan bisa dipegang","Memberi makna pada pekerjaan teknis yang sering dianggap transaksional","Bekerja dengan penuh dedikasi pada proyek yang mereka percayai"],
@@ -369,7 +369,7 @@ const PARAGA = {
     tags:["Yasa","Nalar","Watak Logika"],
     tagClasses:["rtag-orange","rtag-teal","rtag-grey"],
     overview:{
-      id:"Mereka adalah insinyur dalam arti paling luas: seseorang yang melihat dunia sebagai sistem yang bisa dioptimasi. Ketika orang lain melihat sebuah mesin, mereka melihat apa yang bisa diperbaiki. Ketika orang lain melihat sebuah proses, mereka melihat di mana efisiensi bisa ditingkatkan.",
+      id:"Ia adalah insinyur dalam arti paling luas: seseorang yang melihat dunia sebagai sistem yang bisa dioptimasi. Ketika orang lain melihat sebuah mesin, ia melihat apa yang bisa diperbaiki. Ketika orang lain melihat sebuah proses, ia melihat di mana efisiensi bisa ditingkatkan.",
       en:"They're an engineer in the broadest sense: someone who sees the world as a system that can be optimized. When others see a machine, they see what can be improved. When others see a process, they see where efficiency can be increased."},
     kekuatan:{
       id:["Merancang sistem dan proses yang skalabel dan andal","Menemukan inefisiensi yang tidak terlihat orang lain","Mengintegrasikan pemikiran jangka panjang ke dalam keputusan teknis hari ini"],
@@ -383,7 +383,7 @@ const PARAGA = {
     tags:["Yasa","Tata","Watak Jaga"],
     tagClasses:["rtag-orange","rtag-plum","rtag-grey"],
     overview:{
-      id:"Mereka adalah tulang punggung setiap industri yang membutuhkan keandalan. Mereka membangun dengan standar tinggi, konsisten, dan tidak mudah tergoda oleh shortcut. Bagi mereka, kualitas bukan pilihan — ini identitas. Ketika proyek harus benar-benar berfungsi, mereka adalah orang yang paling dicari.",
+      id:"Ia adalah tulang punggung setiap industri yang membutuhkan keandalan. Ia membangun dengan standar tinggi, konsisten, dan tidak mudah tergoda oleh shortcut. Bagi ia, kualitas bukan pilihan — ini identitas. Ketika proyek harus benar-benar berfungsi, ia adalah orang yang paling dicari.",
       en:"They're the backbone of every industry that requires reliability. They build to high standards, consistently, and aren't easily tempted by shortcuts. For them, quality isn't a choice — it's an identity. When a project absolutely must work, they're the most sought-after person."},
     kekuatan:{
       id:["Mengeksekusi dengan presisi dan konsistensi yang jarang ditemukan","Membangun standar operasi yang bisa diandalkan orang lain","Menjaga kualitas di bawah tekanan waktu sekalipun"],
@@ -397,7 +397,7 @@ const PARAGA = {
     tags:["Yasa","Karsa","Watak Guna"],
     tagClasses:["rtag-orange","rtag-plum","rtag-grey"],
     overview:{
-      id:"Mereka adalah praktisi sejati. Mereka belajar dengan melakukan, bukan dengan membaca manual. Ketika ada masalah di lapangan, mereka sudah bergerak sementara yang lain masih berdiskusi. Keahliannya bukan dari teori — tapi dari ribuan jam di tempat kerja yang nyata.",
+      id:"Ia adalah praktisi sejati. Ia belajar dengan melakukan, bukan dengan membaca manual. Ketika ada masalah di lapangan, ia sudah bergerak sementara yang lain masih berdiskusi. Keahliannya bukan dari teori — tapi dari ribuan jam di tempat kerja yang nyata.",
       en:"They're a true practitioner. They learn by doing, not by reading manuals. When there's a problem in the field, they're already moving while others are still discussing. Their expertise doesn't come from theory — it comes from thousands of hours in real workplaces."},
     kekuatan:{
       id:["Diagnosa dan solusi masalah teknis secara cepat dan tepat","Beradaptasi dengan kondisi lapangan yang tidak terduga","Membangun kepercayaan tim melalui kompetensi langsung yang terlihat"],
@@ -413,7 +413,7 @@ const PARAGA = {
     tags:["Tata","Bakti","Watak Reka"],
     tagClasses:["rtag-plum","rtag-sage","rtag-grey"],
     overview:{
-      id:"Mereka membangun keteraturan bukan karena itu aturannya — tapi karena mereka tahu bahwa tanpa struktur yang baik, hal-hal yang bermakna tidak bisa terjadi secara konsisten. Mereka adalah orang yang memastikan visi orang lain bisa dieksekusi dengan andal, sambil menjaga nilai yang mendasarinya.",
+      id:"Ia membangun keteraturan bukan karena itu aturannya — tapi karena ia tahu bahwa tanpa struktur yang baik, hal-hal yang bermakna tidak bisa terjadi secara konsisten. Ia adalah orang yang memastikan visi orang lain bisa dieksekusi dengan andal, sambil menjaga nilai yang mendasarinya.",
       en:"They build order not because it's the rule — but because they know that without good structure, the things that matter can't happen consistently. They're the person who ensures others' visions can be executed reliably, while maintaining the underlying values."},
     kekuatan:{
       id:["Membangun sistem yang melayani manusia, bukan sebaliknya","Menghubungkan proses operasional dengan tujuan yang lebih besar","Menjaga integritas nilai organisasi dalam desain sistem dan prosedur"],
@@ -427,7 +427,7 @@ const PARAGA = {
     tags:["Tata","Nalar","Watak Logika"],
     tagClasses:["rtag-plum","rtag-teal","rtag-grey"],
     overview:{
-      id:"Mereka tidak hanya menjalankan sistem — mereka mendesain ulang yang sudah ada menjadi lebih baik. Ketidakefisienan bukan hanya mengganggu mereka secara estetika — ini adalah masalah yang harus dipecahkan. Mereka adalah konsultan yang dibutuhkan organisasi sebelum mereka tahu mereka membutuhkannya.",
+      id:"Ia tidak hanya menjalankan sistem — ia mendesain ulang yang sudah ada menjadi lebih baik. Ketidakefisienan bukan hanya mengganggu ia secara estetika — ini adalah masalah yang harus dipecahkan. Ia adalah konsultan yang dibutuhkan organisasi sebelum mereka tahu mereka membutuhkannya.",
       en:"They don't just run systems — they redesign existing ones to make them better. Inefficiency doesn't just bother them aesthetically — it's a problem that must be solved. They're the consultant organizations need before they know they need one."},
     kekuatan:{
       id:["Mendiagnosis inefisiensi sistemik dengan cepat dan akurat","Merancang ulang proses yang lebih efisien, skalabel, dan andal","Mengimplementasikan transformasi sistem dengan resistansi perubahan minimal"],
@@ -441,7 +441,7 @@ const PARAGA = {
     tags:["Tata","Yasa","Watak Jaga"],
     tagClasses:["rtag-plum","rtag-orange","rtag-grey"],
     overview:{
-      id:"Mereka adalah arketipe paling murni dari keandalan. Mereka membuat organisasi bisa berfungsi hari demi hari, tanpa drama, tanpa kesalahan, tanpa kejutan. Kekuatannya tidak terlihat saat digunakan dengan baik — baru terlihat saat tidak ada. Dan ketika tidak ada, semuanya mulai goyah.",
+      id:"Ia adalah arketipe paling murni dari keandalan. Ia membuat organisasi bisa berfungsi hari demi hari, tanpa drama, tanpa kesalahan, tanpa kejutan. Kekuatannya tidak terlihat saat digunakan dengan baik — baru terlihat saat tidak ada. Dan ketika tidak ada, semuanya mulai goyah.",
       en:"They're the purest archetype of reliability. They make organizations function day after day, without drama, without mistakes, without surprises. Their strength isn't visible when it's working well — it only becomes visible when it's absent. And when it's absent, everything starts to wobble."},
     kekuatan:{
       id:["Menjaga sistem berjalan dengan presisi dan konsistensi yang tidak tertandingi","Membangun dan mendokumentasikan proses yang bisa diikuti siapapun","Menjadi titik kepercayaan organisasi untuk urusan compliance dan akurasi"],
@@ -455,7 +455,7 @@ const PARAGA = {
     tags:["Tata","Karsa","Watak Guna"],
     tagClasses:["rtag-plum","rtag-orange","rtag-grey"],
     overview:{
-      id:"Mereka menghargai keteraturan bukan sebagai tujuan, tapi sebagai alat. Mereka adalah implementer yang paling efisien: mereka tahu aturannya, mereka tahu shortcut-nya, dan mereka tahu mana yang perlu dijaga dan mana yang bisa difleksibel. Hasilnya selalu tepat sasaran — dengan cara paling efisien yang bisa ditemukan.",
+      id:"Ia menghargai keteraturan bukan sebagai tujuan, tapi sebagai alat. Ia adalah implementer yang paling efisien: ia tahu aturannya, ia tahu shortcut-nya, dan ia tahu mana yang perlu dijaga dan mana yang bisa difleksibel. Hasilnya selalu tepat sasaran — dengan cara paling efisien yang bisa ditemukan.",
       en:"They value order not as a goal, but as a tool. They're the most efficient implementer: they know the rules, they know the shortcuts, and they know what needs to be maintained and what can be flexible. The result is always on target — by the most efficient means they can find."},
     kekuatan:{
       id:["Mengeksekusi tugas administratif dan operasional dengan cepat dan akurat","Menemukan cara paling efisien untuk menyelesaikan proses yang kompleks","Beradaptasi dengan perubahan prosedur tanpa kehilangan akurasi"],
@@ -837,21 +837,26 @@ function showResult(score,serverResult) {
 
   const L = lang==='id';
 
-  // ── Paraga name & sub ──
-  document.getElementById('r-name').textContent = p.en;
-  document.getElementById('r-sub').textContent  =
-    `${kelompok1} ${watak} · ${L?'dengan nuansa':'with a touch of'} ${kelompok2}`;
+  // ── FIX: r-name = nama Lakon (Kelompok Watak), r-sub = English subtitle ──
+  document.getElementById('r-name').textContent = `${kelompok1} ${watak}`;
+  document.getElementById('r-sub').textContent  = p.en;
 
-  // ── Tags ──
+  // ── FIX: Tags = [Kelompok (warna), Watak, Nuansa (outline)] ──
+  const KEL_TAG_CLASS = {
+    Yasa:'rtag-yasa', Nalar:'rtag-nalar', Karya:'rtag-amber',
+    Bakti:'rtag-sage', Karsa:'rtag-karsa', Tata:'rtag-tata'
+  };
   const tagsEl = document.getElementById('r-tags');
-  tagsEl.innerHTML = p.tags.map((t,i)=>
-    `<span class="rtag ${p.tagClasses[i]||'rtag-grey'}">${t}</span>`
-  ).join('');
+  tagsEl.innerHTML = [
+    `<span class="rtag ${KEL_TAG_CLASS[kelompok1]||'rtag-grey'}">${kelompok1}</span>`,
+    `<span class="rtag rtag-grey">Watak ${watak}</span>`,
+    `<span class="rtag rtag-nuance">${L?'Nuansa':'Nuance'} ${kelompok2}</span>`,
+  ].join('');
 
   // ── Good Fit badge ──
   const goodFitEl = document.getElementById('r-good-fit');
   if (goodFitEl) {
-    const gfLbl = L ? 'Good Fit' : 'Good Fit';
+    const gfLbl = L ? 'Nuansa Kelompok' : 'Group Nuance';
     const gfDesc = L
       ? `${kelompok2} (${pct2}%) memberikan nuansa tambahan pada profil ini`
       : `${kelompok2} (${pct2}%) adds an additional nuance to this profile`;
