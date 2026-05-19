@@ -11,6 +11,11 @@
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZ4Yez1bc5K-COQCgCnqZWJGwHm6vx2n9tmyd25kBO9PcjqG6y1orDVxbRh64vysFv/exec";
 
+// ── Batch ID dari URL parameter ?batch=KODE ──
+// B2B: share link dengan ?batch=NAMAPERUSAHAAN → peserta tidak perlu isi manual
+// Individual tanpa ?batch → default 'General'
+const URL_BATCH = new URLSearchParams(window.location.search).get('batch') || 'General';
+
 let lang        = 'id';
 let currentPage = 0;
 let pages       = [];
@@ -108,7 +113,7 @@ const ALL_Q = [
   ...PICK2_Q.map(q=>({...q,sec:2})),
   ...LIKERT_Q.map(q=>({...q,sec:3})),
 ];
-const TOTAL_Q = ALL_Q.length; // 90
+const TOTAL_Q = ALL_Q.length; // 66 (24 MBTI + 21 Pick-2 + 21 Likert)
 
 // ─────────────────────────────────────────────────────────────
 // PARAGA DATA — v2
@@ -628,10 +633,6 @@ function renderUserInfo(mount) {
     <label class="field-label">${L?'Perusahaan / Institusi (opsional)':'Company / Institution (optional)'}</label>
     <input class="field-input" type="text" id="f-company" placeholder="—">
   </div>
-  <div class="field-group">
-    <label class="field-label">${L?'Kode Batch (opsional)':'Batch Code (optional)'}</label>
-    <input class="field-input" type="text" id="f-batch" placeholder="—">
-  </div>
   <button class="btn-submit" id="btn-submit-form" onclick="submitAssessment()">${L?'Kirim Hasil Assessment':'Submit Assessment'}</button>
   <p class="submit-note">${L?'Hasil akan dikirim ke email kamu oleh konsultan kami.':'Results will be sent to your email by our consultant.'}</p>
 </div>`;
@@ -786,7 +787,7 @@ async function submitAssessment() {
   const name   =document.getElementById('f-name')?.value.trim();
   const email  =document.getElementById('f-email')?.value.trim();
   const company=document.getElementById('f-company')?.value.trim()||'';
-  const batch  =document.getElementById('f-batch')?.value.trim()||'general';
+  const batch  = URL_BATCH; // dari URL parameter ?batch=
 
   if (!name||!email){showToast(lang==='id'?'Nama dan email wajib diisi':'Name and email are required');return;}
 
@@ -837,11 +838,11 @@ function showResult(score,serverResult) {
 
   const L = lang==='id';
 
-  // ── FIX: r-name = nama Lakon (Kelompok Watak), r-sub = English subtitle ──
+  // ── Paraga name & sub: nama Lakon besar, EN subtitle kecil ──
   document.getElementById('r-name').textContent = `${kelompok1} ${watak}`;
   document.getElementById('r-sub').textContent  = p.en;
 
-  // ── FIX: Tags = [Kelompok (warna), Watak, Nuansa (outline)] ──
+  // ── Tags: [Kelompok warna] [Watak abu] [Nuansa outline] ──
   const KEL_TAG_CLASS = {
     Yasa:'rtag-yasa', Nalar:'rtag-nalar', Karya:'rtag-amber',
     Bakti:'rtag-sage', Karsa:'rtag-karsa', Tata:'rtag-tata'
@@ -907,6 +908,41 @@ function showResult(score,serverResult) {
   // ── Lingkungan ideal ──
   const lingkEl = document.getElementById('r-lingkungan');
   if (lingkEl) lingkEl.textContent = L ? p.lingkungan_ideal.id : p.lingkungan_ideal.en;
+
+  // ── Nuansa Watak: 2 dimensi MBTI di luar pembentuk Watak ──
+  // Reka/Logika (NF/NT) → Watak dari Pandang+Timbang → Nuansa = Arus+Irama
+  // Jaga/Guna   (SJ/SP) → Watak dari Pandang+Irama   → Nuansa = Arus+Timbang
+  const nwEl = document.getElementById('r-nuansa-watak');
+  if (nwEl) {
+    const nwDims = (watak === 'Reka' || watak === 'Logika')
+      ? [score.dims.arus, score.dims.irama]
+      : [score.dims.arus, score.dims.timbang];
+
+    const NW_DESC = {
+      'Arus Luar':      L ? 'Energi bertumbuh dari interaksi. Paling hidup di tengah orang dan percakapan.' : 'Energy grows from interaction. Most alive among people.',
+      'Arus Dalam':     L ? 'Energi bertumbuh dari kesendirian. Butuh ruang sunyi untuk memproses dan memulihkan diri.' : 'Energy grows from solitude. Needs quiet space to process and recharge.',
+      'Pandang Luas':   L ? 'Bergerak dengan pola dan kemungkinan. Lebih tertarik pada apa yang bisa jadi daripada apa adanya.' : 'Moves with patterns and possibilities. More drawn to what could be than what is.',
+      'Pandang Nyata':  L ? 'Bergerak dengan fakta dan realita. Lebih percaya pada yang terlihat dan terasa nyata.' : 'Moves with facts and reality. More trusting of what is visible and tangible.',
+      'Timbang Logika': L ? 'Keputusan lebih dipengaruhi oleh analisis dan logika daripada nilai personal.' : 'Decisions guided more by analysis and logic than personal values.',
+      'Timbang Rasa':   L ? 'Keputusan lebih dipengaruhi oleh nilai dan dampak pada orang daripada logika semata.' : 'Decisions guided more by values and impact on people than logic alone.',
+      'Irama Pasti':    L ? 'Lebih nyaman dengan kepastian dan rencana. Energi terbaik saat ada struktur yang jelas.' : 'More comfortable with certainty and plans. Best energy with clear structure.',
+      'Irama Bebas':    L ? 'Lebih nyaman dengan fleksibilitas. Energi terbaik saat bisa merespons situasi secara spontan.' : 'More comfortable with flexibility. Best energy when responding spontaneously.',
+    };
+
+    nwEl.innerHTML = '<div class="nuansa-watak-grid">' +
+      nwDims.map(function(d) {
+        var desc = NW_DESC[d.label] || '';
+        return '<div class="nw-item">' +
+          '<div class="nw-bar-row">' +
+            '<div class="nw-label">' + d.label + '</div>' +
+            '<div class="nw-track"><div class="nw-fill" style="width:' + d.pct + '%"></div></div>' +
+            '<div class="nw-pct">' + d.pct + '%</div>' +
+          '</div>' +
+          '<div class="nw-desc">' + desc + '</div>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+  }
 
   // ── MBTI dimension bars ──
   const barsEl = document.getElementById('dim-bars');
