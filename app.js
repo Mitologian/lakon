@@ -52,6 +52,13 @@ const MBTI_Q = [
   {id:"m22",a:"P",b:"J",id_q:"Saat mengerjakan sesuatu, kamu sering menemukan cara yang lebih baik dan berpindah ke pendekatan baru di tengah jalan.",id_a:"Setuju — saya suka mengeksplorasi cara terbaik sambil berjalan",id_b:"Tidak setuju — saya lebih suka menyelesaikan satu pendekatan sampai tuntas",en_q:"When working on something, you often find a better way and switch approaches midway.",en_a:"Agree — I like exploring the best way as I go",en_b:"Disagree — I prefer completing one approach all the way through"},
   {id:"m23",a:"J",b:"P",id_q:"Kamu biasanya sudah tahu apa yang akan kamu lakukan di akhir pekan jauh sebelum hari itu tiba.",id_a:"Setuju — saya suka punya rencana yang jelas lebih awal",id_b:"Tidak setuju — saya suka memutuskan secara spontan",en_q:"You usually know what you'll be doing on the weekend well before it arrives.",en_a:"Agree — I like having clear plans well in advance",en_b:"Disagree — I prefer deciding spontaneously"},
   {id:"m24",a:"P",b:"J",id_q:"Kamu merasa lebih kreatif dan produktif saat bekerja tanpa jadwal yang terlalu ketat.",id_a:"Setuju — struktur yang terlalu kaku membatasi saya",id_b:"Tidak setuju — struktur yang jelas justru membebaskan energi kreatif saya",en_q:"You feel more creative and productive when working without a very strict schedule.",en_a:"Agree — overly rigid structure limits me",en_b:"Disagree — clear structure actually frees my creative energy"},
+  // ── 6 soal tambahan untuk akurasi Watak (N/S, T/F, J/P jadi 8 soal masing-masing) ──
+  {id:"m25",a:"N",b:"S",id_q:"Saat dihadapkan pada pilihan, kamu lebih sering mengandalkan intuisi tentang apa yang mungkin terjadi daripada pengalaman yang sudah terbukti.",id_a:"Setuju — saya lebih percaya pada intuisi dan kemungkinan",id_b:"Tidak setuju — pengalaman dan bukti lebih bisa diandalkan",en_q:"When faced with choices, you more often rely on intuition about what might happen than on proven experience.",en_a:"Agree — I trust intuition and possibilities more",en_b:"Disagree — experience and evidence are more reliable"},
+  {id:"m26",a:"S",b:"N",id_q:"Kamu lebih mudah mendeskripsikan sesuatu dengan detail konkret daripada analogi atau metafora.",id_a:"Setuju — saya lebih nyaman dengan deskripsi yang spesifik dan faktual",id_b:"Tidak setuju — analogi dan gambaran besar lebih mudah bagi saya",en_q:"You find it easier to describe things with concrete details than with analogies or metaphors.",en_a:"Agree — I'm more comfortable with specific, factual descriptions",en_b:"Disagree — analogies and the big picture come more naturally"},
+  {id:"m27",a:"T",b:"F",id_q:"Ketika ada konflik dalam tim, kamu cenderung fokus pada penyelesaian masalahnya daripada memastikan semua orang merasa nyaman terlebih dahulu.",id_a:"Setuju — masalahnya yang harus diselesaikan, perasaan bisa diurus setelahnya",id_b:"Tidak setuju — saya perlu memastikan semua orang oke dulu sebelum melanjutkan",en_q:"When there's team conflict, you tend to focus on solving the problem rather than ensuring everyone feels comfortable first.",en_a:"Agree — the problem needs solving; feelings can be addressed after",en_b:"Disagree — I need to make sure everyone is okay before moving on"},
+  {id:"m28",a:"F",b:"T",id_q:"Bagi kamu, keputusan yang baik adalah keputusan yang mempertimbangkan dampaknya pada orang-orang yang terlibat, bukan hanya yang paling logis secara objektif.",id_a:"Setuju — dampak pada manusia adalah bagian inti dari keputusan yang baik",id_b:"Tidak setuju — keputusan terbaik adalah yang paling logis dan objektif",en_q:"For you, a good decision is one that considers its impact on the people involved, not just the most logically sound one.",en_a:"Agree — human impact is a core part of good decision-making",en_b:"Disagree — the best decision is the most logical and objective one"},
+  {id:"m29",a:"J",b:"P",id_q:"Kamu merasa tidak nyaman kalau harus mengerjakan sesuatu tanpa batas waktu yang jelas.",id_a:"Setuju — saya lebih produktif ketika ada deadline yang pasti",id_b:"Tidak setuju — tidak ada deadline justru memberi saya kebebasan bereksplorasi",en_q:"You feel uncomfortable having to work on something without a clear deadline.",en_a:"Agree — I'm more productive with a definite deadline",en_b:"Disagree — no deadline actually gives me freedom to explore"},
+  {id:"m30",a:"P",b:"J",id_q:"Kamu lebih sering mengubah rencana di tengah jalan daripada mengikutinya sampai selesai.",id_a:"Setuju — saya sering menemukan cara yang lebih baik dan berpindah ke sana",id_b:"Tidak setuju — saya biasanya mengikuti rencana awal sampai selesai",en_q:"You more often change plans midway than follow them through to completion.",en_a:"Agree — I often find a better way and switch to it",en_b:"Disagree — I usually follow the original plan through to the end"},
 ];
 
 // ─────────────────────────────────────────────────────────────
@@ -113,7 +120,7 @@ const ALL_Q = [
   ...PICK2_Q.map(q=>({...q,sec:2})),
   ...LIKERT_Q.map(q=>({...q,sec:3})),
 ];
-const TOTAL_Q = ALL_Q.length; // 66 (24 MBTI + 21 Pick-2 + 21 Likert)
+const TOTAL_Q = ALL_Q.length; // 72 (30 MBTI + 21 Pick-2 + 21 Likert)
 
 // ─────────────────────────────────────────────────────────────
 // PARAGA DATA — v2
@@ -748,19 +755,16 @@ function computeScore() {
   // MBTI
   const sc={E:0,I:0,N:0,S:0,T:0,F:0,J:0,P:0};
   Object.values(mbtiAns).forEach(v=>sc[v]++);
-  // dimPct: selalu kembalikan persentase sisi DOMINAN (50–100)
   const dimPct=(a,b)=>Math.round((Math.max(a,b)/((a+b)||1))*100);
-  // dimDir: kembalikan 'left' kalau a >= b, 'right' kalau b > a
   const dimDir=(a,b)=>a>=b?'left':'right';
   const mbtiType=(sc.E>=sc.I?'E':'I')+(sc.N>=sc.S?'N':'S')+(sc.T>=sc.F?'T':'F')+(sc.J>=sc.P?'J':'P');
   const WATAK_MAP={INFJ:'Reka',INFP:'Reka',ENFJ:'Reka',ENFP:'Reka',INTJ:'Logika',INTP:'Logika',ENTJ:'Logika',ENTP:'Logika',ISTJ:'Jaga',ISFJ:'Jaga',ESTJ:'Jaga',ESFJ:'Jaga',ISTP:'Guna',ISFP:'Guna',ESTP:'Guna',ESFP:'Guna'};
   const watak=WATAK_MAP[mbtiType]||'Reka';
-  // dims: tiap dimensi punya left/right label, dir (sisi dominan), pct (50-100)
   const dims={
-    arus:   {left:'Arus Luar', right:'Arus Dalam',    dir:dimDir(sc.E,sc.I), pct:dimPct(sc.E,sc.I)},
+    arus:   {left:'Arus Luar',  right:'Arus Dalam',    dir:dimDir(sc.E,sc.I), pct:dimPct(sc.E,sc.I)},
     pandang:{left:'Pandang Luas',right:'Pandang Nyata',dir:dimDir(sc.N,sc.S), pct:dimPct(sc.N,sc.S)},
     timbang:{left:'Timbang Logika',right:'Timbang Rasa',dir:dimDir(sc.T,sc.F), pct:dimPct(sc.T,sc.F)},
-    irama:  {left:'Irama Pasti',right:'Irama Bebas',  dir:dimDir(sc.J,sc.P), pct:dimPct(sc.J,sc.P)},
+    irama:  {left:'Irama Pasti',right:'Irama Bebas',   dir:dimDir(sc.J,sc.P), pct:dimPct(sc.J,sc.P)},
   };
 
   // Pick-2
@@ -824,51 +828,74 @@ async function submitAssessment() {
 //          MBTI dimension bars, blurred sections
 // ─────────────────────────────────────────────────────────────
 // ─────────────────────────────────────────────────────────────
-// DIM BAR HELPER — bar dua arah Myers-Briggs style
+// DIM ZONE HELPERS
+// Threshold berbeda untuk dimensi 8-soal vs 6-soal:
+// 8 soal (N/S, T/F, J/P — pembentuk Watak):
+//   4/8=50% Samar | 5/8=63% Ringan | 6/8=75% Moderat | 7/8=88% Kuat | 8/8=100% Kuat
+// 6 soal (E/I — Arus, tidak menentukan Watak):
+//   3/6=50% Samar | 4/6=67% Moderat | 5/6=83% Moderat | 6/6=100% Kuat
 // ─────────────────────────────────────────────────────────────
-function getDimZone(pct, L) {
-  if (pct >= 85) return L ? 'Kuat'   : 'Strong';
-  if (pct >= 70) return L ? 'Moderat': 'Moderate';
-  if (pct >= 60) return L ? 'Ringan' : 'Slight';
-  return L ? 'Samar' : 'Unclear';
+function getDimZone(pct, L, is8) {
+  if (is8) {
+    if (pct >= 88) return L ? 'Kuat'    : 'Strong';
+    if (pct >= 75) return L ? 'Moderat' : 'Moderate';
+    if (pct >= 63) return L ? 'Ringan'  : 'Slight';
+    return L ? 'Samar' : 'Unclear';
+  } else {
+    if (pct >= 84) return L ? 'Kuat'    : 'Strong';
+    if (pct >= 67) return L ? 'Moderat' : 'Moderate';
+    if (pct >  50) return L ? 'Ringan'  : 'Slight';
+    return L ? 'Samar' : 'Unclear';
+  }
+}
+
+function getDimBadgeCls(pct, is8) {
+  if (is8) {
+    if (pct >= 88) return 'strong';
+    if (pct >= 75) return 'moderate';
+    if (pct >= 63) return 'slight';
+    return 'unclear';
+  } else {
+    if (pct >= 84) return 'strong';
+    if (pct >= 67) return 'moderate';
+    if (pct >  50) return 'slight';
+    return 'unclear';
+  }
+}
+
+function buildDim2HTML(d, color, title, L, is8) {
+  var halfFill = (d.pct - 50) * 2;
+  var zone     = getDimZone(d.pct, L, is8);
+  var domLabel = d.dir === 'left' ? d.left : d.right;
+  var badge    = d.pct === 50 ? zone : zone + ' · ' + domLabel;
+  var cls      = getDimBadgeCls(d.pct, is8);
+  return '<div class="dim2-wrap">'
+    + '<div class="dim2-title">' + title + '</div>'
+    + '<div class="dim2-bar-row">'
+    +   '<div class="dim2-side dim2-left" style="font-weight:' + (d.dir==='left'?'600':'400') + ';color:' + (d.dir==='left'?'var(--ink)':'var(--mid)') + '">' + d.left + '</div>'
+    +   '<div class="dim2-track">'
+    +     '<div class="dim2-center"></div>'
+    +     '<div class="dim2-fill-left"  style="width:' + (d.dir==='left' ?halfFill/2:0) + '%;background:' + color + '"></div>'
+    +     '<div class="dim2-fill-right" style="width:' + (d.dir==='right'?halfFill/2:0) + '%;background:' + color + '"></div>'
+    +   '</div>'
+    +   '<div class="dim2-side dim2-right" style="font-weight:' + (d.dir==='right'?'600':'400') + ';color:' + (d.dir==='right'?'var(--ink)':'var(--mid)') + '">' + d.right + '</div>'
+    + '</div>'
+    + '<div class="dim2-badge-row">'
+    +   '<span class="dim2-badge dim2-badge-' + cls + '">' + badge + '</span>'
+    + '</div>'
+    + '</div>';
 }
 
 function renderDimBars(dims, L, containerId) {
-  const el = document.getElementById(containerId);
+  var el = document.getElementById(containerId);
   if (!el) return;
-  const DIM_COLORS = {
-    arus:'#C17A3C', pandang:'#3A6B9E', timbang:'#4A7C6B', irama:'#7B5A9E'
-  };
-  const keys = ['arus','pandang','timbang','irama'];
-  const titles = {
-    arus:   {id:'Arus',    en:'Energy'},
-    pandang:{id:'Pandang', en:'Perception'},
-    timbang:{id:'Timbang', en:'Judgment'},
-    irama:  {id:'Irama',   en:'Lifestyle'},
-  };
-  el.innerHTML = keys.map(function(k) {
-    const d = dims[k];
-    const color = DIM_COLORS[k];
-    const title = L ? titles[k].id : titles[k].en;
-    const zone  = getDimZone(d.pct, L);
-    const domLabel = d.dir === 'left' ? d.left : d.right;
-    const halfFill = (d.pct - 50) * 2; // 0-100% of half track
-    const badgeText = d.pct === 50 ? zone : zone + ' · ' + domLabel;
-    return '<div class="dim2-wrap">'
-      + '<div class="dim2-title">' + title + '</div>'
-      + '<div class="dim2-bar-row">'
-      +   '<div class="dim2-side dim2-left" style="font-weight:' + (d.dir==='left'?'600':'400') + ';color:' + (d.dir==='left'?'var(--ink)':'var(--mid)') + '">' + d.left + '</div>'
-      +   '<div class="dim2-track">'
-      +     '<div class="dim2-center"></div>'
-      +     '<div class="dim2-fill-left" style="width:' + (d.dir==='left'?halfFill/2:0) + '%;background:' + color + '"></div>'
-      +     '<div class="dim2-fill-right" style="width:' + (d.dir==='right'?halfFill/2:0) + '%;background:' + color + '"></div>'
-      +   '</div>'
-      +   '<div class="dim2-side dim2-right" style="font-weight:' + (d.dir==='right'?'600':'400') + ';color:' + (d.dir==='right'?'var(--ink)':'var(--mid)') + '">' + d.right + '</div>'
-      + '</div>'
-      + '<div class="dim2-badge-row">'
-      +   '<span class="dim2-badge dim2-badge-' + (d.pct >= 85 ? 'strong' : d.pct >= 70 ? 'moderate' : d.pct >= 60 ? 'slight' : 'unclear') + '">' + badgeText + '</span>'
-      + '</div>'
-      + '</div>';
+  var COLORS    = {arus:'#C17A3C',pandang:'#3A6B9E',timbang:'#4A7C6B',irama:'#7B5A9E'};
+  var TITLES_ID = {arus:'Arus',pandang:'Pandang',timbang:'Timbang',irama:'Irama'};
+  var TITLES_EN = {arus:'Energy',pandang:'Perception',timbang:'Judgment',irama:'Lifestyle'};
+  var IS8_MAP   = {arus:false, pandang:true, timbang:true, irama:true};
+  var keys      = ['arus','pandang','timbang','irama'];
+  el.innerHTML  = keys.map(function(k) {
+    return buildDim2HTML(dims[k], COLORS[k], L?TITLES_ID[k]:TITLES_EN[k], L, IS8_MAP[k]);
   }).join('');
 }
 
@@ -906,6 +933,32 @@ function showResult(score,serverResult) {
     `<span class="rtag rtag-grey">Watak ${watak}</span>`,
     `<span class="rtag rtag-nuance">${L?'Nuansa':'Nuance'} ${kelompok2}</span>`,
   ].join('');
+
+  // ── Warning kalau dimensi Watak Samar ──
+  const watakDims = (watak==='Reka'||watak==='Logika')
+    ? [score.dims.pandang, score.dims.timbang]
+    : [score.dims.pandang, score.dims.irama];
+  const samarWatak = watakDims.filter(function(d){return d.pct <= 50;});
+  const warningEl = document.getElementById('r-watak-warning');
+  if (warningEl) {
+    if (samarWatak.length > 0) {
+      var samarNames = samarWatak.map(function(d){
+        return d.left.split(' ')[0];
+      }).join(' dan ');
+      warningEl.innerHTML = L
+        ? '<div class="watak-warning"><span class="watak-warning-icon">⚡</span>'
+          + '<span>Dimensi <strong>' + samarNames + '</strong> berada di titik tengah. '
+          + 'Watak yang ditampilkan adalah perkiraan terbaik — '
+          + '<a href="https://wa.me/6282126373601" target="_blank" class="watak-warning-link">sesi konsultasi via WhatsApp</a> dapat membantu mengklarifikasi.</span></div>'
+        : '<div class="watak-warning"><span class="watak-warning-icon">⚡</span>'
+          + '<span>Your <strong>' + samarNames + '</strong> dimension is at the midpoint. '
+          + 'The Watak shown is our best estimate — '
+          + '<a href="https://wa.me/6282126373601" target="_blank" class="watak-warning-link">a consultation session via WhatsApp</a> can help clarify.</span></div>';
+      warningEl.style.display = 'block';
+    } else {
+      warningEl.style.display = 'none';
+    }
+  }
 
   // ── Good Fit badge ──
   const goodFitEl = document.getElementById('r-good-fit');
@@ -965,53 +1018,23 @@ function showResult(score,serverResult) {
   // ── Nuansa Watak: 2 dimensi MBTI di luar pembentuk Watak ──
   // Reka/Logika (NF/NT) → Watak dari Pandang+Timbang → Nuansa = Arus+Irama
   // Jaga/Guna   (SJ/SP) → Watak dari Pandang+Irama   → Nuansa = Arus+Timbang
-  // ── Nuansa Watak — sama styling dengan dim bars ──
+  // ── Nuansa Watak — 2 dimensi di luar Watak, pakai bar dua arah ──
   const nwEl = document.getElementById('r-nuansa-watak');
   if (nwEl) {
-    // Reka/Logika (NF/NT): nuansa = Arus + Irama
-    // Jaga/Guna (SJ/SP):   nuansa = Arus + Timbang
-    const nwKeys = (watak === 'Reka' || watak === 'Logika')
-      ? ['arus','irama'] : ['arus','timbang'];
-    const NW_DESC = {
-      arus:   {id:'Dari mana energimu bertumbuh — dari keramaian atau kesendirian.',    en:'Where your energy comes from — people or solitude.'},
-      timbang:{id:'Bagaimana keputusanmu dibuat — lewat logika atau perasaan.',         en:'How you make decisions — through logic or feeling.'},
-      irama:  {id:'Bagaimana kamu menjalani hari — dengan rencana atau spontanitas.',   en:'How you approach your day — with plans or spontaneity.'},
-    };
-    const NW_COLORS = {arus:'#C17A3C', timbang:'#4A7C6B', irama:'#7B5A9E'};
-    const NW_TITLES = {
-      arus:   {id:'Arus Energi',   en:'Energy Direction'},
-      timbang:{id:'Cara Menimbang',en:'Decision Style'},
-      irama:  {id:'Irama Kerja',   en:'Work Rhythm'},
-    };
-    nwEl.innerHTML = '<div class="dim2-grid-nw">' +
-      nwKeys.map(function(k) {
-        var d = score.dims[k];
-        var color = NW_COLORS[k];
-        var title = L ? NW_TITLES[k].id : NW_TITLES[k].en;
-        var desc  = L ? NW_DESC[k].id   : NW_DESC[k].en;
-        var zone  = getDimZone(d.pct, L);
-        var domLabel = d.dir === 'left' ? d.left : d.right;
-        var halfFill = (d.pct - 50) * 2;
-        var badgeText = d.pct === 50 ? zone : zone + ' · ' + domLabel;
-        var badgeCls  = d.pct >= 85 ? 'strong' : d.pct >= 70 ? 'moderate' : d.pct >= 60 ? 'slight' : 'unclear';
-        return '<div class="dim2-wrap">'
-          + '<div class="dim2-title">' + title + '</div>'
-          + '<div class="dim2-bar-row">'
-          +   '<div class="dim2-side dim2-left" style="font-weight:' + (d.dir==='left'?'600':'400') + ';color:' + (d.dir==='left'?'var(--ink)':'var(--mid)') + '">' + d.left + '</div>'
-          +   '<div class="dim2-track">'
-          +     '<div class="dim2-center"></div>'
-          +     '<div class="dim2-fill-left" style="width:' + (d.dir==='left'?halfFill/2:0) + '%;background:' + color + '"></div>'
-          +     '<div class="dim2-fill-right" style="width:' + (d.dir==='right'?halfFill/2:0) + '%;background:' + color + '"></div>'
-          +   '</div>'
-          +   '<div class="dim2-side dim2-right" style="font-weight:' + (d.dir==='right'?'600':'400') + ';color:' + (d.dir==='right'?'var(--ink)':'var(--mid)') + '">' + d.right + '</div>'
-          + '</div>'
-          + '<div class="dim2-badge-row">'
-          +   '<span class="dim2-badge dim2-badge-' + badgeCls + '">' + badgeText + '</span>'
-          + '</div>'
-          + '<div class="dim2-desc">' + desc + '</div>'
-          + '</div>';
-      }).join('') +
-    '</div>';
+    const NW_KEYS = (watak==='Reka'||watak==='Logika') ? ['arus','irama'] : ['arus','timbang'];
+    const NW_COLORS  = {arus:'#C17A3C',timbang:'#4A7C6B',irama:'#7B5A9E'};
+    const NW_TITLE_ID = {arus:'Arus Energi',timbang:'Cara Menimbang',irama:'Irama Kerja'};
+    const NW_TITLE_EN = {arus:'Energy Direction',timbang:'Decision Style',irama:'Work Rhythm'};
+    const NW_DESC_ID  = {arus:'Dari mana energimu bertumbuh — keramaian atau kesendirian.',timbang:'Bagaimana keputusanmu dibuat — lewat logika atau perasaan.',irama:'Bagaimana kamu menjalani hari — dengan rencana atau spontanitas.'};
+    const NW_DESC_EN  = {arus:'Where your energy comes from — people or solitude.',timbang:'How you make decisions — through logic or feeling.',irama:'How you approach your day — with plans or spontaneity.'};
+    nwEl.innerHTML = NW_KEYS.map(function(k) {
+      var d = score.dims[k];
+      var title = L ? NW_TITLE_ID[k] : NW_TITLE_EN[k];
+      var desc  = L ? NW_DESC_ID[k]  : NW_DESC_EN[k];
+      var nwIs8 = (k !== 'arus');
+      return buildDim2HTML(d, NW_COLORS[k], title, L, nwIs8)
+        + '<div class="dim2-desc">' + desc + '</div>';
+    }).join('');
   }
 
   // ── MBTI dimension bars — dua arah ──

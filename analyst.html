@@ -376,8 +376,7 @@ a{text-decoration:none;color:inherit}
 
 /* Dim bars */
 .rpt-dims{display:flex;flex-direction:column;gap:16px}
-/* dim2 bidirectional bars in report */
-.rpt-dim2-wrap{margin-bottom:.25rem}
+.rpt-dim2-wrap{}
 .rpt-dim2-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mid);text-align:center;margin-bottom:4px}
 .rpt-dim2-row{display:grid;grid-template-columns:90px 1fr 90px;align-items:center;gap:8px}
 .rpt-dim2-side{font-size:12px}
@@ -957,36 +956,13 @@ async function openReport(idx) {
   };
   const sortedKel = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
 
-  // Dims array (legacy fallback)
+  // Dims
   const dims = [
     {label: raw.dim_arus    || '—', pct: +raw.dim_arus_pct    || 0},
     {label: raw.dim_pandang || '—', pct: +raw.dim_pandang_pct || 0},
     {label: raw.dim_timbang || '—', pct: +raw.dim_timbang_pct || 0},
     {label: raw.dim_irama   || '—', pct: +raw.dim_irama_pct   || 0},
   ];
-  // dimsObj — format baru untuk bar dua arah
-  // Reconstruct dari raw data: dim_arus = label sisi dominan
-  function parseDim2(label, pct) {
-    var PAIRS = {
-      'Arus Luar':{'left':'Arus Luar','right':'Arus Dalam','dir':'left'},
-      'Arus Dalam':{'left':'Arus Luar','right':'Arus Dalam','dir':'right'},
-      'Pandang Luas':{'left':'Pandang Luas','right':'Pandang Nyata','dir':'left'},
-      'Pandang Nyata':{'left':'Pandang Luas','right':'Pandang Nyata','dir':'right'},
-      'Timbang Logika':{'left':'Timbang Logika','right':'Timbang Rasa','dir':'left'},
-      'Timbang Rasa':{'left':'Timbang Logika','right':'Timbang Rasa','dir':'right'},
-      'Irama Pasti':{'left':'Irama Pasti','right':'Irama Bebas','dir':'left'},
-      'Irama Bebas':{'left':'Irama Pasti','right':'Irama Bebas','dir':'right'},
-    };
-    var p = PAIRS[label];
-    if (!p) return {left:label,right:'—',dir:'left',pct:pct||50};
-    return {left:p.left,right:p.right,dir:p.dir,pct:pct||50};
-  }
-  var dimsObj = {
-    arus:    parseDim2(raw.dim_arus    || '', +raw.dim_arus_pct    || 50),
-    pandang: parseDim2(raw.dim_pandang || '', +raw.dim_pandang_pct || 50),
-    timbang: parseDim2(raw.dim_timbang || '', +raw.dim_timbang_pct || 50),
-    irama:   parseDim2(raw.dim_irama   || '', +raw.dim_irama_pct   || 50),
-  };
 
   // Get paraga content
   const overview   = OVERVIEW[key] || 'Profil dalam pengembangan.';
@@ -1084,7 +1060,7 @@ async function openReport(idx) {
     <!-- 4 Dimensi -->
     <div class="report-section">
       <div class="report-section-h">4 Dimensi Cara Bergerak</div>
-      ${renderReportDims(dimsObj)}
+      ${renderReportDims(raw)}
     </div>
 
     <!-- Two-col: Memimpin & Bersosialisasi -->
@@ -1312,52 +1288,85 @@ document.addEventListener('keydown', e => {
 });
 
 // ══════════════════════════════════════════════════════════
-// DIM2 HELPER — bidirectional bar for report
+// DIM2 HELPERS — bar dua arah untuk report
+// Threshold mengikuti distribusi alami 6 soal:
+// 50% Samar | 51-66% Ringan | 67-83% Moderat | 84-100% Kuat
 // ══════════════════════════════════════════════════════════
-function getDimZoneRpt(pct) {
-  if (pct >= 85) return 'strong';
-  if (pct >= 70) return 'moderate';
-  if (pct >= 60) return 'slight';
-  return 'unclear';
+// Threshold berbeda untuk 8-soal vs 6-soal
+// 8 soal (pandang/timbang/irama): 50%=Samar,63%=Ringan,75%=Moderat,88%=Kuat
+// 6 soal (arus): 50%=Samar,67%=Moderat,84%=Kuat
+function getRptDimZoneCls(pct, is8) {
+  if (is8) {
+    if (pct >= 88) return 'strong';
+    if (pct >= 75) return 'moderate';
+    if (pct >= 63) return 'slight';
+    return 'unclear';
+  } else {
+    if (pct >= 84) return 'strong';
+    if (pct >= 67) return 'moderate';
+    if (pct >  50) return 'slight';
+    return 'unclear';
+  }
 }
-function getDimZoneLabel(pct) {
-  if (pct >= 85) return 'Kuat';
-  if (pct >= 70) return 'Moderat';
-  if (pct >= 60) return 'Ringan';
-  return 'Samar';
+function getRptDimZoneLbl(pct, is8) {
+  if (is8) {
+    if (pct >= 88) return 'Kuat';
+    if (pct >= 75) return 'Moderat';
+    if (pct >= 63) return 'Ringan';
+    return 'Samar';
+  } else {
+    if (pct >= 84) return 'Kuat';
+    if (pct >= 67) return 'Moderat';
+    if (pct >  50) return 'Ringan';
+    return 'Samar';
+  }
 }
-
-function renderReportDims(dims) {
-  const DIM_COLORS = {arus:'#C17A3C',pandang:'#3A6B9E',timbang:'#4A7C6B',irama:'#7B5A9E'};
-  const DIM_TITLES = {arus:'Arus',pandang:'Pandang',timbang:'Timbang',irama:'Irama'};
-  const keys = ['arus','pandang','timbang','irama'];
+function parseDim2(label, pct) {
+  var MAP = {
+    'Arus Luar':      {left:'Arus Luar',  right:'Arus Dalam',    dir:'left'},
+    'Arus Dalam':     {left:'Arus Luar',  right:'Arus Dalam',    dir:'right'},
+    'Pandang Luas':   {left:'Pandang Luas',right:'Pandang Nyata',dir:'left'},
+    'Pandang Nyata':  {left:'Pandang Luas',right:'Pandang Nyata',dir:'right'},
+    'Timbang Logika': {left:'Timbang Logika',right:'Timbang Rasa',dir:'left'},
+    'Timbang Rasa':   {left:'Timbang Logika',right:'Timbang Rasa',dir:'right'},
+    'Irama Pasti':    {left:'Irama Pasti',right:'Irama Bebas',   dir:'left'},
+    'Irama Bebas':    {left:'Irama Pasti',right:'Irama Bebas',   dir:'right'},
+  };
+  var p = MAP[label];
+  if (!p) return {left:label,right:'—',dir:'left',pct:pct||50};
+  return {left:p.left,right:p.right,dir:p.dir,pct:pct||50};
+}
+function buildRptDim2(d, color, title, is8) {
+  var halfFill = (d.pct - 50) * 2;
+  var zone     = getRptDimZoneCls(d.pct, is8);
+  var zoneLbl  = getRptDimZoneLbl(d.pct, is8);
+  var domLabel = d.dir === 'left' ? d.left : d.right;
+  var badge    = d.pct === 50 ? 'Samar' : zoneLbl + ' · ' + domLabel;
+  return '<div class="rpt-dim2-wrap">'
+    + '<div class="rpt-dim2-title">' + esc(title) + '</div>'
+    + '<div class="rpt-dim2-row">'
+    +   '<div class="rpt-dim2-side rpt-dim2-left" style="font-weight:' + (d.dir==='left'?'600':'400') + ';color:' + (d.dir==='left'?'var(--ink)':'var(--mid)') + '">' + esc(d.left) + '</div>'
+    +   '<div class="rpt-dim2-track">'
+    +     '<div class="rpt-dim2-center"></div>'
+    +     '<div class="rpt-dim2-fill-l" style="width:' + (d.dir==='left' ?halfFill/2:0) + '%;background:' + color + '"></div>'
+    +     '<div class="rpt-dim2-fill-r" style="width:' + (d.dir==='right'?halfFill/2:0) + '%;background:' + color + '"></div>'
+    +   '</div>'
+    +   '<div class="rpt-dim2-side rpt-dim2-right" style="font-weight:' + (d.dir==='right'?'600':'400') + ';color:' + (d.dir==='right'?'var(--ink)':'var(--mid)') + '">' + esc(d.right) + '</div>'
+    + '</div>'
+    + '<div class="rpt-dim2-badge-row">'
+    +   '<span class="rpt-dim2-badge rpt-dim2-badge-' + zone + '">' + esc(badge) + '</span>'
+    + '</div>'
+    + '</div>';
+}
+function renderReportDims(raw) {
+  var COLORS = {arus:'#C17A3C',pandang:'#3A6B9E',timbang:'#4A7C6B',irama:'#7B5A9E'};
+  var TITLES = {arus:'Arus',pandang:'Pandang',timbang:'Timbang',irama:'Irama'};
+  var keys   = ['arus','pandang','timbang','irama'];
+  var fields = {arus:[raw.dim_arus,raw.dim_arus_pct],pandang:[raw.dim_pandang,raw.dim_pandang_pct],timbang:[raw.dim_timbang,raw.dim_timbang_pct],irama:[raw.dim_irama,raw.dim_irama_pct]};
+  var IS8_MAP = {arus:false, pandang:true, timbang:true, irama:true};
   return '<div class="rpt-dims">' + keys.map(function(k) {
-    var d = dims[k];
-    if (!d || !d.left) {
-      // fallback for old data format
-      return '<div class="rpt-dim2-wrap"><div class="rpt-dim2-title">' + DIM_TITLES[k] + '</div><div style="font-size:12px;color:var(--mid);text-align:center">—</div></div>';
-    }
-    var color = DIM_COLORS[k];
-    var halfFill = (d.pct - 50) * 2;
-    var zone = getDimZoneRpt(d.pct);
-    var zoneLabel = getDimZoneLabel(d.pct);
-    var domLabel = d.dir === 'left' ? d.left : d.right;
-    var badgeText = d.pct === 50 ? 'Samar' : zoneLabel + ' · ' + domLabel;
-    return '<div class="rpt-dim2-wrap">'
-      + '<div class="rpt-dim2-title">' + esc(DIM_TITLES[k]) + '</div>'
-      + '<div class="rpt-dim2-row">'
-      +   '<div class="rpt-dim2-side rpt-dim2-left" style="font-weight:' + (d.dir==='left'?'600':'400') + ';color:' + (d.dir==='left'?'var(--ink)':'var(--mid)') + '">' + esc(d.left) + '</div>'
-      +   '<div class="rpt-dim2-track">'
-      +     '<div class="rpt-dim2-center"></div>'
-      +     '<div class="rpt-dim2-fill-l" style="width:' + (d.dir==='left'?halfFill/2:0) + '%;background:' + color + '"></div>'
-      +     '<div class="rpt-dim2-fill-r" style="width:' + (d.dir==='right'?halfFill/2:0) + '%;background:' + color + '"></div>'
-      +   '</div>'
-      +   '<div class="rpt-dim2-side rpt-dim2-right" style="font-weight:' + (d.dir==='right'?'600':'400') + ';color:' + (d.dir==='right'?'var(--ink)':'var(--mid)') + '">' + esc(d.right) + '</div>'
-      + '</div>'
-      + '<div class="rpt-dim2-badge-row">'
-      +   '<span class="rpt-dim2-badge rpt-dim2-badge-' + zone + '">' + esc(badgeText) + '</span>'
-      + '</div>'
-      + '</div>';
+    var d = parseDim2(fields[k][0]||'', +(fields[k][1])||50);
+    return buildRptDim2(d, COLORS[k], TITLES[k], IS8_MAP[k]);
   }).join('') + '</div>';
 }
 

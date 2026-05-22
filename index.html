@@ -8,6 +8,7 @@
 <title>Lakon™ — Career Profile Assessment</title>
 <link rel="icon" type="image/png" href="/images/lakon-favicon.png">
 <link rel="apple-touch-icon" href="/images/lakon-favicon.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
@@ -466,6 +467,7 @@
         <div class="result-name" id="r-name">—</div>
         <div class="result-sub" id="r-sub">—</div>
         <div class="result-tags" id="r-tags"></div>
+        <div id="r-watak-warning" style="display:none"></div>
         <div class="good-fit-wrap" id="r-good-fit"></div>
       </div>
     </div>
@@ -602,7 +604,14 @@
               <li class="upsell-feature" data-id="Risiko misalignment & saran perkembangan" data-en="Misalignment risks & growth recommendations">Risiko misalignment &amp; saran perkembangan</li>
             </ul>
             <div class="upsell-price">Rp 99.000 <span data-id="/ laporan" data-en="/ report">/ laporan</span></div>
-            <button class="btn-upsell outline" onclick="handleUpsell('report')" data-id="Beli Report →" data-en="Buy Report →">Beli Report →</button>
+            <div class="upsell-btn-group">
+              <button class="btn-upsell outline" onclick="handleUpsell('report','email')">
+                <span>✉</span> <span data-id="Email" data-en="Email">Email</span>
+              </button>
+              <button class="btn-upsell outline wa" onclick="handleUpsell('report','wa')">
+                <span>💬</span> <span>WhatsApp</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -619,7 +628,14 @@
               <li class="upsell-feature" data-id="Follow-up 30 hari via email" data-en="30-day follow-up via email">Follow-up 30 hari via email</li>
             </ul>
             <div class="upsell-price">Rp 349.000 <span data-id="/ paket" data-en="/ package">/ paket</span></div>
-            <button class="btn-upsell" onclick="handleUpsell('bundle')" data-id="Pesan Paket Lengkap →" data-en="Order Full Package →">Pesan Paket Lengkap →</button>
+            <div class="upsell-btn-group">
+              <button class="btn-upsell" onclick="handleUpsell('bundle','email')">
+                <span>✉</span> <span data-id="Email" data-en="Email">Email</span>
+              </button>
+              <button class="btn-upsell wa" onclick="handleUpsell('bundle','wa')">
+                <span>💬</span> <span>WhatsApp</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -627,6 +643,8 @@
       <div class="upsell-footer">
         <span data-id="Pertanyaan? " data-en="Questions? ">Pertanyaan? </span>
         <a href="mailto:sales@mitologiinspira.com">sales@mitologiinspira.com</a>
+        <span class="upsell-footer-sep">·</span>
+        <a href="https://wa.me/6282126373601" target="_blank">WhatsApp</a>
       </div>
     </div>
   </div>
@@ -638,12 +656,28 @@
 
 <!-- Upsell handler -->
 <script>
-function handleUpsell(type) {
-  const urls = {
-    report: 'mailto:sales@mitologiinspira.com?subject=Lakon Career Report&body=Halo, saya tertarik untuk membeli Lakon Career Report.',
-    bundle: 'mailto:sales@mitologiinspira.com?subject=Lakon Report + Konsultasi&body=Halo, saya tertarik untuk memesan paket Report + Sesi Konsultasi.',
+function handleUpsell(type, channel) {
+  // Ambil nama Paraga dari result kalau ada
+  var paragaName = document.getElementById('r-name') ? document.getElementById('r-name').textContent : '';
+  var paragaInfo = paragaName && paragaName !== '—' ? ' Paraga saya: ' + paragaName + '.' : '';
+
+  var subjects = {
+    report: 'Lakon Career Report',
+    bundle: 'Lakon Report + Sesi Konsultasi',
   };
-  window.location.href = urls[type] || urls.report;
+  var bodies = {
+    report: 'Halo, saya tertarik untuk membeli Lakon Career Report.' + paragaInfo,
+    bundle: 'Halo, saya tertarik untuk memesan paket Report + Sesi Konsultasi.' + paragaInfo,
+  };
+
+  if (channel === 'wa') {
+    var msg = encodeURIComponent(bodies[type] || bodies.report);
+    window.open('https://wa.me/6282126373601?text=' + msg, '_blank');
+  } else {
+    var subj = encodeURIComponent(subjects[type] || subjects.report);
+    var body = encodeURIComponent(bodies[type] || bodies.report);
+    window.location.href = 'mailto:sales@mitologiinspira.com?subject=' + subj + '&body=' + body;
+  }
 }
 </script>
 
