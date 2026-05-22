@@ -375,12 +375,24 @@ a{text-decoration:none;color:inherit}
 .rpt-graph-pct{font-size:11px;font-weight:700}
 
 /* Dim bars */
-.rpt-dims{display:flex;flex-direction:column;gap:10px}
-.rpt-dim-row{display:grid;grid-template-columns:120px 1fr 55px;align-items:center;gap:10px}
-.rpt-dim-label{font-size:12px;font-weight:600;color:var(--ink);text-align:right}
-.rpt-dim-track{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
-.rpt-dim-fill{height:100%;border-radius:4px;background:var(--amber)}
-.rpt-dim-pct{font-size:11px;font-weight:700;color:var(--amber)}
+.rpt-dims{display:flex;flex-direction:column;gap:16px}
+/* dim2 bidirectional bars in report */
+.rpt-dim2-wrap{margin-bottom:.25rem}
+.rpt-dim2-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--mid);text-align:center;margin-bottom:4px}
+.rpt-dim2-row{display:grid;grid-template-columns:90px 1fr 90px;align-items:center;gap:8px}
+.rpt-dim2-side{font-size:12px}
+.rpt-dim2-left{text-align:right}
+.rpt-dim2-right{text-align:left}
+.rpt-dim2-track{height:8px;background:var(--border);border-radius:8px;position:relative;overflow:visible}
+.rpt-dim2-center{position:absolute;left:50%;top:-3px;width:1.5px;height:14px;background:var(--mid);opacity:.3;transform:translateX(-50%);z-index:2}
+.rpt-dim2-fill-l{position:absolute;right:50%;top:0;height:100%;border-radius:8px 0 0 8px}
+.rpt-dim2-fill-r{position:absolute;left:50%;top:0;height:100%;border-radius:0 8px 8px 0}
+.rpt-dim2-badge-row{display:flex;justify-content:center;margin-top:4px}
+.rpt-dim2-badge{font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px}
+.rpt-dim2-badge-strong  {background:var(--amber-lt);color:var(--amber-dk);border:1px solid var(--amber-bd)}
+.rpt-dim2-badge-moderate{background:var(--sage-lt);color:var(--sage-dk);border:1px solid #A8C8BC}
+.rpt-dim2-badge-slight  {background:#E6F1FB;color:#185FA5;border:1px solid #B5D4F4}
+.rpt-dim2-badge-unclear {background:var(--linen);color:var(--mid);border:1px solid var(--border)}
 
 /* Two-col layout in report */
 .report-2col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
@@ -417,6 +429,8 @@ a{text-decoration:none;color:inherit}
   .report-2col { display:grid !important; grid-template-columns:1fr 1fr !important; gap:1rem !important }
   .rpt-graph-row { grid-template-columns:120px 1fr 44px !important }
   .rpt-dim-row   { grid-template-columns:100px 1fr 44px !important }
+  .rpt-dim2-row  { grid-template-columns:80px 1fr 80px !important }
+  .rpt-dim2-track { overflow:visible !important }
   @page { margin:1.5cm; size:A4 }
 }
 
@@ -943,13 +957,36 @@ async function openReport(idx) {
   };
   const sortedKel = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
 
-  // Dims
+  // Dims array (legacy fallback)
   const dims = [
     {label: raw.dim_arus    || '—', pct: +raw.dim_arus_pct    || 0},
     {label: raw.dim_pandang || '—', pct: +raw.dim_pandang_pct || 0},
     {label: raw.dim_timbang || '—', pct: +raw.dim_timbang_pct || 0},
     {label: raw.dim_irama   || '—', pct: +raw.dim_irama_pct   || 0},
   ];
+  // dimsObj — format baru untuk bar dua arah
+  // Reconstruct dari raw data: dim_arus = label sisi dominan
+  function parseDim2(label, pct) {
+    var PAIRS = {
+      'Arus Luar':{'left':'Arus Luar','right':'Arus Dalam','dir':'left'},
+      'Arus Dalam':{'left':'Arus Luar','right':'Arus Dalam','dir':'right'},
+      'Pandang Luas':{'left':'Pandang Luas','right':'Pandang Nyata','dir':'left'},
+      'Pandang Nyata':{'left':'Pandang Luas','right':'Pandang Nyata','dir':'right'},
+      'Timbang Logika':{'left':'Timbang Logika','right':'Timbang Rasa','dir':'left'},
+      'Timbang Rasa':{'left':'Timbang Logika','right':'Timbang Rasa','dir':'right'},
+      'Irama Pasti':{'left':'Irama Pasti','right':'Irama Bebas','dir':'left'},
+      'Irama Bebas':{'left':'Irama Pasti','right':'Irama Bebas','dir':'right'},
+    };
+    var p = PAIRS[label];
+    if (!p) return {left:label,right:'—',dir:'left',pct:pct||50};
+    return {left:p.left,right:p.right,dir:p.dir,pct:pct||50};
+  }
+  var dimsObj = {
+    arus:    parseDim2(raw.dim_arus    || '', +raw.dim_arus_pct    || 50),
+    pandang: parseDim2(raw.dim_pandang || '', +raw.dim_pandang_pct || 50),
+    timbang: parseDim2(raw.dim_timbang || '', +raw.dim_timbang_pct || 50),
+    irama:   parseDim2(raw.dim_irama   || '', +raw.dim_irama_pct   || 50),
+  };
 
   // Get paraga content
   const overview   = OVERVIEW[key] || 'Profil dalam pengembangan.';
@@ -1047,14 +1084,7 @@ async function openReport(idx) {
     <!-- 4 Dimensi -->
     <div class="report-section">
       <div class="report-section-h">4 Dimensi Cara Bergerak</div>
-      <div class="rpt-dims">
-        ${dims.map(d=>`
-          <div class="rpt-dim-row">
-            <div class="rpt-dim-label">${esc(d.label)}</div>
-            <div class="rpt-dim-track"><div class="rpt-dim-fill" style="width:${d.pct}%"></div></div>
-            <div class="rpt-dim-pct">${d.pct}%</div>
-          </div>`).join('')}
-      </div>
+      ${renderReportDims(dimsObj)}
     </div>
 
     <!-- Two-col: Memimpin & Bersosialisasi -->
@@ -1280,6 +1310,56 @@ document.addEventListener('keydown', e => {
     if (modal.classList.contains('open')) { e.preventDefault(); window.print(); }
   }
 });
+
+// ══════════════════════════════════════════════════════════
+// DIM2 HELPER — bidirectional bar for report
+// ══════════════════════════════════════════════════════════
+function getDimZoneRpt(pct) {
+  if (pct >= 85) return 'strong';
+  if (pct >= 70) return 'moderate';
+  if (pct >= 60) return 'slight';
+  return 'unclear';
+}
+function getDimZoneLabel(pct) {
+  if (pct >= 85) return 'Kuat';
+  if (pct >= 70) return 'Moderat';
+  if (pct >= 60) return 'Ringan';
+  return 'Samar';
+}
+
+function renderReportDims(dims) {
+  const DIM_COLORS = {arus:'#C17A3C',pandang:'#3A6B9E',timbang:'#4A7C6B',irama:'#7B5A9E'};
+  const DIM_TITLES = {arus:'Arus',pandang:'Pandang',timbang:'Timbang',irama:'Irama'};
+  const keys = ['arus','pandang','timbang','irama'];
+  return '<div class="rpt-dims">' + keys.map(function(k) {
+    var d = dims[k];
+    if (!d || !d.left) {
+      // fallback for old data format
+      return '<div class="rpt-dim2-wrap"><div class="rpt-dim2-title">' + DIM_TITLES[k] + '</div><div style="font-size:12px;color:var(--mid);text-align:center">—</div></div>';
+    }
+    var color = DIM_COLORS[k];
+    var halfFill = (d.pct - 50) * 2;
+    var zone = getDimZoneRpt(d.pct);
+    var zoneLabel = getDimZoneLabel(d.pct);
+    var domLabel = d.dir === 'left' ? d.left : d.right;
+    var badgeText = d.pct === 50 ? 'Samar' : zoneLabel + ' · ' + domLabel;
+    return '<div class="rpt-dim2-wrap">'
+      + '<div class="rpt-dim2-title">' + esc(DIM_TITLES[k]) + '</div>'
+      + '<div class="rpt-dim2-row">'
+      +   '<div class="rpt-dim2-side rpt-dim2-left" style="font-weight:' + (d.dir==='left'?'600':'400') + ';color:' + (d.dir==='left'?'var(--ink)':'var(--mid)') + '">' + esc(d.left) + '</div>'
+      +   '<div class="rpt-dim2-track">'
+      +     '<div class="rpt-dim2-center"></div>'
+      +     '<div class="rpt-dim2-fill-l" style="width:' + (d.dir==='left'?halfFill/2:0) + '%;background:' + color + '"></div>'
+      +     '<div class="rpt-dim2-fill-r" style="width:' + (d.dir==='right'?halfFill/2:0) + '%;background:' + color + '"></div>'
+      +   '</div>'
+      +   '<div class="rpt-dim2-side rpt-dim2-right" style="font-weight:' + (d.dir==='right'?'600':'400') + ';color:' + (d.dir==='right'?'var(--ink)':'var(--mid)') + '">' + esc(d.right) + '</div>'
+      + '</div>'
+      + '<div class="rpt-dim2-badge-row">'
+      +   '<span class="rpt-dim2-badge rpt-dim2-badge-' + zone + '">' + esc(badgeText) + '</span>'
+      + '</div>'
+      + '</div>';
+  }).join('') + '</div>';
+}
 
 // ══════════════════════════════════════════════════════════
 // UTILS

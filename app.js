@@ -748,15 +748,19 @@ function computeScore() {
   // MBTI
   const sc={E:0,I:0,N:0,S:0,T:0,F:0,J:0,P:0};
   Object.values(mbtiAns).forEach(v=>sc[v]++);
+  // dimPct: selalu kembalikan persentase sisi DOMINAN (50–100)
   const dimPct=(a,b)=>Math.round((Math.max(a,b)/((a+b)||1))*100);
+  // dimDir: kembalikan 'left' kalau a >= b, 'right' kalau b > a
+  const dimDir=(a,b)=>a>=b?'left':'right';
   const mbtiType=(sc.E>=sc.I?'E':'I')+(sc.N>=sc.S?'N':'S')+(sc.T>=sc.F?'T':'F')+(sc.J>=sc.P?'J':'P');
   const WATAK_MAP={INFJ:'Reka',INFP:'Reka',ENFJ:'Reka',ENFP:'Reka',INTJ:'Logika',INTP:'Logika',ENTJ:'Logika',ENTP:'Logika',ISTJ:'Jaga',ISFJ:'Jaga',ESTJ:'Jaga',ESFJ:'Jaga',ISTP:'Guna',ISFP:'Guna',ESTP:'Guna',ESFP:'Guna'};
   const watak=WATAK_MAP[mbtiType]||'Reka';
+  // dims: tiap dimensi punya left/right label, dir (sisi dominan), pct (50-100)
   const dims={
-    arus:   {label:sc.E>=sc.I?'Arus Luar':'Arus Dalam',    pct:dimPct(sc.E,sc.I)},
-    pandang:{label:sc.N>=sc.S?'Pandang Luas':'Pandang Nyata',pct:dimPct(sc.N,sc.S)},
-    timbang:{label:sc.T>=sc.F?'Timbang Logika':'Timbang Rasa',pct:dimPct(sc.T,sc.F)},
-    irama:  {label:sc.J>=sc.P?'Irama Pasti':'Irama Bebas',  pct:dimPct(sc.J,sc.P)},
+    arus:   {left:'Arus Luar', right:'Arus Dalam',    dir:dimDir(sc.E,sc.I), pct:dimPct(sc.E,sc.I)},
+    pandang:{left:'Pandang Luas',right:'Pandang Nyata',dir:dimDir(sc.N,sc.S), pct:dimPct(sc.N,sc.S)},
+    timbang:{left:'Timbang Logika',right:'Timbang Rasa',dir:dimDir(sc.T,sc.F), pct:dimPct(sc.T,sc.F)},
+    irama:  {left:'Irama Pasti',right:'Irama Bebas',  dir:dimDir(sc.J,sc.P), pct:dimPct(sc.J,sc.P)},
   };
 
   // Pick-2
@@ -819,6 +823,55 @@ async function submitAssessment() {
 //          narrative overview, kekuatan, lingkungan ideal,
 //          MBTI dimension bars, blurred sections
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// DIM BAR HELPER — bar dua arah Myers-Briggs style
+// ─────────────────────────────────────────────────────────────
+function getDimZone(pct, L) {
+  if (pct >= 85) return L ? 'Kuat'   : 'Strong';
+  if (pct >= 70) return L ? 'Moderat': 'Moderate';
+  if (pct >= 60) return L ? 'Ringan' : 'Slight';
+  return L ? 'Samar' : 'Unclear';
+}
+
+function renderDimBars(dims, L, containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const DIM_COLORS = {
+    arus:'#C17A3C', pandang:'#3A6B9E', timbang:'#4A7C6B', irama:'#7B5A9E'
+  };
+  const keys = ['arus','pandang','timbang','irama'];
+  const titles = {
+    arus:   {id:'Arus',    en:'Energy'},
+    pandang:{id:'Pandang', en:'Perception'},
+    timbang:{id:'Timbang', en:'Judgment'},
+    irama:  {id:'Irama',   en:'Lifestyle'},
+  };
+  el.innerHTML = keys.map(function(k) {
+    const d = dims[k];
+    const color = DIM_COLORS[k];
+    const title = L ? titles[k].id : titles[k].en;
+    const zone  = getDimZone(d.pct, L);
+    const domLabel = d.dir === 'left' ? d.left : d.right;
+    const halfFill = (d.pct - 50) * 2; // 0-100% of half track
+    const badgeText = d.pct === 50 ? zone : zone + ' · ' + domLabel;
+    return '<div class="dim2-wrap">'
+      + '<div class="dim2-title">' + title + '</div>'
+      + '<div class="dim2-bar-row">'
+      +   '<div class="dim2-side dim2-left" style="font-weight:' + (d.dir==='left'?'600':'400') + ';color:' + (d.dir==='left'?'var(--ink)':'var(--mid)') + '">' + d.left + '</div>'
+      +   '<div class="dim2-track">'
+      +     '<div class="dim2-center"></div>'
+      +     '<div class="dim2-fill-left" style="width:' + (d.dir==='left'?halfFill/2:0) + '%;background:' + color + '"></div>'
+      +     '<div class="dim2-fill-right" style="width:' + (d.dir==='right'?halfFill/2:0) + '%;background:' + color + '"></div>'
+      +   '</div>'
+      +   '<div class="dim2-side dim2-right" style="font-weight:' + (d.dir==='right'?'600':'400') + ';color:' + (d.dir==='right'?'var(--ink)':'var(--mid)') + '">' + d.right + '</div>'
+      + '</div>'
+      + '<div class="dim2-badge-row">'
+      +   '<span class="dim2-badge dim2-badge-' + (d.pct >= 85 ? 'strong' : d.pct >= 70 ? 'moderate' : d.pct >= 60 ? 'slight' : 'unclear') + '">' + badgeText + '</span>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
 function showResult(score,serverResult) {
   const kelompok1 = score.sorted[0][0]; // Best Fit kelompok
   const kelompok2 = score.sorted[1][0]; // Good Fit kelompok
@@ -912,53 +965,57 @@ function showResult(score,serverResult) {
   // ── Nuansa Watak: 2 dimensi MBTI di luar pembentuk Watak ──
   // Reka/Logika (NF/NT) → Watak dari Pandang+Timbang → Nuansa = Arus+Irama
   // Jaga/Guna   (SJ/SP) → Watak dari Pandang+Irama   → Nuansa = Arus+Timbang
+  // ── Nuansa Watak — sama styling dengan dim bars ──
   const nwEl = document.getElementById('r-nuansa-watak');
   if (nwEl) {
-    const nwDims = (watak === 'Reka' || watak === 'Logika')
-      ? [score.dims.arus, score.dims.irama]
-      : [score.dims.arus, score.dims.timbang];
-
+    // Reka/Logika (NF/NT): nuansa = Arus + Irama
+    // Jaga/Guna (SJ/SP):   nuansa = Arus + Timbang
+    const nwKeys = (watak === 'Reka' || watak === 'Logika')
+      ? ['arus','irama'] : ['arus','timbang'];
     const NW_DESC = {
-      'Arus Luar':      L ? 'Energi bertumbuh dari interaksi. Paling hidup di tengah orang dan percakapan.' : 'Energy grows from interaction. Most alive among people.',
-      'Arus Dalam':     L ? 'Energi bertumbuh dari kesendirian. Butuh ruang sunyi untuk memproses dan memulihkan diri.' : 'Energy grows from solitude. Needs quiet space to process and recharge.',
-      'Pandang Luas':   L ? 'Bergerak dengan pola dan kemungkinan. Lebih tertarik pada apa yang bisa jadi daripada apa adanya.' : 'Moves with patterns and possibilities. More drawn to what could be than what is.',
-      'Pandang Nyata':  L ? 'Bergerak dengan fakta dan realita. Lebih percaya pada yang terlihat dan terasa nyata.' : 'Moves with facts and reality. More trusting of what is visible and tangible.',
-      'Timbang Logika': L ? 'Keputusan lebih dipengaruhi oleh analisis dan logika daripada nilai personal.' : 'Decisions guided more by analysis and logic than personal values.',
-      'Timbang Rasa':   L ? 'Keputusan lebih dipengaruhi oleh nilai dan dampak pada orang daripada logika semata.' : 'Decisions guided more by values and impact on people than logic alone.',
-      'Irama Pasti':    L ? 'Lebih nyaman dengan kepastian dan rencana. Energi terbaik saat ada struktur yang jelas.' : 'More comfortable with certainty and plans. Best energy with clear structure.',
-      'Irama Bebas':    L ? 'Lebih nyaman dengan fleksibilitas. Energi terbaik saat bisa merespons situasi secara spontan.' : 'More comfortable with flexibility. Best energy when responding spontaneously.',
+      arus:   {id:'Dari mana energimu bertumbuh — dari keramaian atau kesendirian.',    en:'Where your energy comes from — people or solitude.'},
+      timbang:{id:'Bagaimana keputusanmu dibuat — lewat logika atau perasaan.',         en:'How you make decisions — through logic or feeling.'},
+      irama:  {id:'Bagaimana kamu menjalani hari — dengan rencana atau spontanitas.',   en:'How you approach your day — with plans or spontaneity.'},
     };
-
-    nwEl.innerHTML = '<div class="nuansa-watak-grid">' +
-      nwDims.map(function(d) {
-        var desc = NW_DESC[d.label] || '';
-        return '<div class="nw-item">' +
-          '<div class="nw-bar-row">' +
-            '<div class="nw-label">' + d.label + '</div>' +
-            '<div class="nw-track"><div class="nw-fill" style="width:' + d.pct + '%"></div></div>' +
-            '<div class="nw-pct">' + d.pct + '%</div>' +
-          '</div>' +
-          '<div class="nw-desc">' + desc + '</div>' +
-        '</div>';
+    const NW_COLORS = {arus:'#C17A3C', timbang:'#4A7C6B', irama:'#7B5A9E'};
+    const NW_TITLES = {
+      arus:   {id:'Arus Energi',   en:'Energy Direction'},
+      timbang:{id:'Cara Menimbang',en:'Decision Style'},
+      irama:  {id:'Irama Kerja',   en:'Work Rhythm'},
+    };
+    nwEl.innerHTML = '<div class="dim2-grid-nw">' +
+      nwKeys.map(function(k) {
+        var d = score.dims[k];
+        var color = NW_COLORS[k];
+        var title = L ? NW_TITLES[k].id : NW_TITLES[k].en;
+        var desc  = L ? NW_DESC[k].id   : NW_DESC[k].en;
+        var zone  = getDimZone(d.pct, L);
+        var domLabel = d.dir === 'left' ? d.left : d.right;
+        var halfFill = (d.pct - 50) * 2;
+        var badgeText = d.pct === 50 ? zone : zone + ' · ' + domLabel;
+        var badgeCls  = d.pct >= 85 ? 'strong' : d.pct >= 70 ? 'moderate' : d.pct >= 60 ? 'slight' : 'unclear';
+        return '<div class="dim2-wrap">'
+          + '<div class="dim2-title">' + title + '</div>'
+          + '<div class="dim2-bar-row">'
+          +   '<div class="dim2-side dim2-left" style="font-weight:' + (d.dir==='left'?'600':'400') + ';color:' + (d.dir==='left'?'var(--ink)':'var(--mid)') + '">' + d.left + '</div>'
+          +   '<div class="dim2-track">'
+          +     '<div class="dim2-center"></div>'
+          +     '<div class="dim2-fill-left" style="width:' + (d.dir==='left'?halfFill/2:0) + '%;background:' + color + '"></div>'
+          +     '<div class="dim2-fill-right" style="width:' + (d.dir==='right'?halfFill/2:0) + '%;background:' + color + '"></div>'
+          +   '</div>'
+          +   '<div class="dim2-side dim2-right" style="font-weight:' + (d.dir==='right'?'600':'400') + ';color:' + (d.dir==='right'?'var(--ink)':'var(--mid)') + '">' + d.right + '</div>'
+          + '</div>'
+          + '<div class="dim2-badge-row">'
+          +   '<span class="dim2-badge dim2-badge-' + badgeCls + '">' + badgeText + '</span>'
+          + '</div>'
+          + '<div class="dim2-desc">' + desc + '</div>'
+          + '</div>';
       }).join('') +
     '</div>';
   }
 
-  // ── MBTI dimension bars ──
-  const barsEl = document.getElementById('dim-bars');
-  if (barsEl) {
-    barsEl.innerHTML = [
-      ['Arus',score.dims.arus],
-      ['Pandang',score.dims.pandang],
-      ['Timbang',score.dims.timbang],
-      ['Irama',score.dims.irama],
-    ].map(([,d])=>`
-      <div class="dim-row">
-        <div class="dim-label">${d.label}</div>
-        <div class="dim-track"><div class="dim-fill" style="width:${d.pct}%"></div></div>
-        <div class="dim-pct">${d.pct}%</div>
-      </div>`).join('');
-  }
+  // ── MBTI dimension bars — dua arah ──
+  renderDimBars(score.dims, L, 'dim-bars');
 
   showScreen('screen-result');
 }
