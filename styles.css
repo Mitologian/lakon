@@ -1236,3 +1236,72 @@ ul, ol { list-style: none; }
 }
 .btn-upsell.outline.wa:hover { background: #f0fdf4; }
 .upsell-footer-sep { color: var(--mid); margin: 0 4px; }
+
+/* ════════════════════════════════
+   PERAN IDEAL — tabel posisi & peran
+════════════════════════════════ */
+.peran-naratif { margin-bottom: 1.25rem; }
+
+.peran-legend {
+  display: flex; gap: 1.25rem; margin-bottom: .75rem; flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--mid); font-weight: 500;
+}
+.peran-dot {
+  width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; display: inline-block;
+}
+.peran-ideal { background: var(--sage); }
+.peran-cocok { background: var(--amber); }
+.peran-bisa  { background: var(--light); }
+
+.peran-sub-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--light);
+  padding-bottom: 8px; border-bottom: 1.5px solid var(--border);
+  margin-bottom: .75rem;
+}
+
+.peran-table-wrap { overflow-x: auto; }
+.peran-table {
+  width: 100%; border-collapse: collapse;
+}
+.peran-table th {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .1em; color: var(--light);
+  padding: 0 10px 8px; text-align: left;
+}
+.peran-th-fit   { width: 70px; padding-left: 0; }
+.peran-th-posisi{ width: 200px; }
+.peran-th-desc  { }
+
+.peran-row { border-bottom: 1px solid var(--linen); transition: background .12s; }
+.peran-row:last-child { border-bottom: none; }
+.peran-row:hover { background: var(--linen); }
+
+.peran-td-fit {
+  padding: 12px 10px 12px 0; vertical-align: top;
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+.peran-td-posisi { padding: 12px 12px; vertical-align: top; width: 200px; }
+.peran-td-desc   { padding: 12px 0 12px 4px; vertical-align: top; font-size: 13px; color: var(--mid); line-height: 1.6; }
+
+.peran-fit-lbl {
+  font-size: 11px; font-weight: 700;
+}
+.peran-ideal.peran-fit-lbl { color: var(--sage-dk); }
+.peran-cocok.peran-fit-lbl { color: var(--amber-dk); }
+.peran-bisa.peran-fit-lbl  { color: var(--light); }
+
+.peran-nama  { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; margin-bottom: 3px; }
+.peran-level { font-size: 11px; color: var(--light); font-weight: 500; }
+
+@media (max-width: 768px) {
+  .peran-table { display: block; }
+  .peran-table thead { display: none; }
+  .peran-table tbody, .peran-row { display: block; }
+  .peran-row { padding: 12px 0; border-bottom: 1px solid var(--linen); }
+  .peran-td-fit, .peran-td-posisi, .peran-td-desc { display: block; padding: 2px 0; width: 100%; }
+  .peran-td-desc { margin-top: 4px; }
+}
