@@ -313,7 +313,7 @@ const PERAN_IDEAL = {
   posisi:[
     {nama:"Business Analyst / Product Analyst",level:"Mid",fit:"ideal",peran:"Mendiagnosis masalah bisnis atau produk dengan cepat dan menghasilkan rekomendasi yang langsung bisa dieksekusi. Tidak terjebak di analisis yang berlebihan."},
     {nama:"Growth Analyst / Performance Marketer",level:"Mid",fit:"ideal",peran:"Menganalisis funnel dan performa kampanye untuk mengidentifikasi peluang pertumbuhan yang bisa langsung ditindaklanjuti."},
-    {nama:"Management Consultant",level:"Mid–Senior",fit:"ideal",peran:"Mendiagnosis masalah klien dengan cepat dan merancang solusi yang practical. Klien menghargai kecepatan dari analisis ke rekomendasi."},
+    {nama:"Forensic / Investigative Analyst",level:"Mid–Senior",fit:"ideal",peran:"Membongkar kasus, anomali, atau fraud dengan metode investigatif yang cepat dan langsung menghasilkan temuan yang bisa ditindaklanjuti. Dihargai karena kecepatan dari bukti ke kesimpulan."},
     {nama:"Operations Analyst / Process Improvement",level:"Mid",fit:"cocok",peran:"Mengidentifikasi inefisiensi dalam proses operasional dan langsung merancang perbaikan yang bisa diimplementasikan."},
     {nama:"Product Manager",level:"Mid",fit:"cocok",peran:"Mengelola backlog dan prioritas produk berdasarkan data yang solid. Tidak membiarkan roadmap dikuasai oleh opini."},
     {nama:"Healthcare Quality Improvement",level:"Mid",fit:"cocok",peran:"Menganalisis data klinis untuk mengidentifikasi peluang peningkatan kualitas layanan yang bisa langsung diimplementasikan."},
@@ -371,7 +371,7 @@ const PERAN_IDEAL = {
 "Tata|Reka":{
   naratif:"Mereka membangun keteraturan bukan karena itu aturannya — tapi karena mereka tahu sistem yang baik adalah yang membuat hal-hal bermakna bisa terjadi secara konsisten. Di posisi apapun, mereka adalah orang yang memastikan visi bisa dieksekusi dengan andal, tanpa kehilangan nilai yang mendasarinya.",
   posisi:[
-    {nama:"Chief of Staff / Head of Operations",level:"Senior",fit:"ideal",peran:"Menerjemahkan visi pemimpin menjadi sistem dan rencana operasional yang konkret. Alasan organisasi bisa bergerak kohesif tanpa micromanagement."},
+    {nama:"Head of Operations / Organizational Development",level:"Senior",fit:"ideal",peran:"Menerjemahkan visi organisasi menjadi sistem dan rencana operasional yang konkret. Alasan organisasi bisa bergerak kohesif tanpa micromanagement."},
     {nama:"Knowledge Management Specialist",level:"Mid",fit:"ideal",peran:"Membangun sistem dokumentasi dan berbagi pengetahuan yang benar-benar digunakan orang. Tidak sekadar mengarsip — memastikan pengetahuan hidup dan accessible."},
     {nama:"Organizational Excellence Manager",level:"Mid–Senior",fit:"ideal",peran:"Memastikan nilai-nilai organisasi tidak hanya terpampang di dinding tapi hidup dalam prosedur dan proses sehari-hari."},
     {nama:"Internal Communications Manager",level:"Mid",fit:"cocok",peran:"Merancang komunikasi internal yang memastikan arah dan nilai organisasi tersampaikan dengan konsisten ke seluruh lapisan."},
@@ -1320,14 +1320,33 @@ function showResult(score,serverResult) {
     const pd = PERAN_IDEAL[key];
     if (pd) {
       var FIT_LABEL = {ideal:{id:'Ideal',cls:'peran-ideal'},cocok:{id:'Cocok',cls:'peran-cocok'},bisa:{id:'Bisa',cls:'peran-bisa'}};
-      var rows = pd.posisi.map(function(p) {
+      // ── Nuansa: campur 2 peran dari Kelompok ke-2 (Watak sama) ──
+      var nuPd = PERAN_IDEAL[kelompok2 + '|' + watak];
+      var blendP = (typeof LakonNuansa !== 'undefined' && nuPd)
+        ? LakonNuansa.blendPeran(pd.posisi, nuPd.posisi, kelompok2, lang)
+        : { rows: pd.posisi.map(function(p){ return {nama:p.nama,level:p.level,fit:p.fit,peran:p.peran,isNuansa:false}; }), secondary: [], label: '' };
+      var NTAG = function(lbl){ return ' <span class="peran-nuansa-tag" style="display:inline-block;font-size:9px;font-weight:700;color:#7B5A9E;border:1px solid #7B5A9E;border-radius:8px;padding:0 6px;margin-left:4px;vertical-align:middle">↗ ' + lbl + '</span>'; };
+      var rows = blendP.rows.map(function(p) {
         var f = FIT_LABEL[p.fit] || FIT_LABEL.bisa;
+        var tag = p.isNuansa ? NTAG(blendP.label) : '';
         return '<tr class="peran-row">'
           + '<td class="peran-td-fit"><span class="peran-dot ' + f.cls + '"></span><span class="peran-fit-lbl ' + f.cls + '">' + f.id + '</span></td>'
-          + '<td class="peran-td-posisi"><div class="peran-nama">' + p.nama + '</div><span class="peran-level">' + p.level + '</span></td>'
+          + '<td class="peran-td-posisi"><div class="peran-nama">' + p.nama + tag + '</div><span class="peran-level">' + p.level + '</span></td>'
           + '<td class="peran-td-desc">' + p.peran + '</td>'
           + '</tr>';
       }).join('');
+      var secHtml = '';
+      if (blendP.secondary && blendP.secondary.length) {
+        var secRows = blendP.secondary.map(function(p) {
+          return '<tr class="peran-row">'
+            + '<td class="peran-td-fit"><span class="peran-dot peran-cocok"></span></td>'
+            + '<td class="peran-td-posisi"><div class="peran-nama">' + p.nama + '</div><span class="peran-level">' + p.level + '</span></td>'
+            + '<td class="peran-td-desc">' + p.peran + '</td>'
+            + '</tr>';
+        }).join('');
+        secHtml = '<div class="peran-sub-label" style="margin-top:16px;color:#7B5A9E">' + (L ? 'Dengan pertimbangan ' : 'Considering ') + blendP.label + '</div>'
+          + '<div class="peran-table-wrap"><table class="peran-table"><tbody>' + secRows + '</tbody></table></div>';
+      }
       peranEl.innerHTML = '<p class="result-text peran-naratif">' + pd.naratif + '</p>'
         + '<div class="peran-legend">'
         +   '<span class="legend-item"><span class="peran-dot peran-ideal"></span>Ideal</span>'
@@ -1339,7 +1358,8 @@ function showResult(score,serverResult) {
         +   '<th class="peran-th-fit"></th>'
         +   '<th class="peran-th-posisi">' + (L ? 'Posisi' : 'Position') + '</th>'
         +   '<th class="peran-th-desc">' + (L ? 'Perannya di sini' : 'Their role here') + '</th>'
-        + '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+        + '</tr></thead><tbody>' + rows + '</tbody></table></div>'
+        + secHtml;
     }
   }
 
@@ -1364,6 +1384,10 @@ function showResult(score,serverResult) {
 
   // ── MBTI dimension bars — dua arah ──
   renderDimBars(score.dims, L, 'dim-bars');
+
+  // ── Kartu Paraga (share) + field akurasi ──
+  if (typeof mountResultCard === 'function') mountResultCard(kelompok1, watak);
+  if (typeof mountRating === 'function') mountRating(kelompok1, watak, serverResult);
 
   showScreen('screen-result');
 }

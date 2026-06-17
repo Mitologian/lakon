@@ -479,6 +479,8 @@ a{text-decoration:none;color:inherit}
 }
 </style>
 </head>
+<!-- mesin nuansa: harus dimuat sebelum script report -->
+<script src="lakon_nuansa.js"></script>
 <body>
 
 <!-- ══ LOGIN ══ -->
@@ -635,7 +637,7 @@ const ARAH = {
   },
   "Nalar": {
     karir:["UX Researcher","Data Scientist / Quantitative Researcher","Policy Research Analyst","Business Analyst","Clinical Researcher","Intelligence Analyst"],
-    studi:["Psikologi","Sosiologi / Antropologi","Statistika / Matematika","Public Health","Ilmu Komputer (AI/ML)"],
+    studi:["Psikologi (Riset / Eksperimental)","Sosiologi / Antropologi","Statistika / Matematika","Public Health","Ilmu Komputer (AI/ML)"],
   },
   "Karya": {
     karir:["Creative Director","Brand Storyteller / Content Strategist","Design Systems Lead","Independent Filmmaker","Arts Educator","Brand Activation Specialist"],
@@ -643,7 +645,7 @@ const ARAH = {
   },
   "Bakti": {
     karir:["Executive Coach / Leadership Developer","Counselor / Psychotherapist","Hospital / Healthcare Administrator","Community Outreach Worker","Learning & Development Specialist","Paramedic / Perawat"],
-    studi:["Psikologi","Konseling","Keperawatan","Pekerjaan Sosial","Administrasi Rumah Sakit"],
+    studi:["Psikologi (Klinis / Konseling)","Konseling","Keperawatan","Pekerjaan Sosial","Administrasi Rumah Sakit"],
   },
   "Karsa": {
     karir:["CEO / General Manager","Founder / Social Entrepreneur","Management Consultant","Sales Director / Business Development","Chief Strategy Officer","Political Campaigner"],
@@ -999,6 +1001,16 @@ async function openReport(idx) {
   const lingkungan = LINGKUNGAN[key] || '—';
   const risiko     = RISIKO[key] || '—';
   const arahKel    = ARAH[kel1] || {karir:[], studi:[]};
+  // ── Nuansa: pool Kelompok ke-2 (karir/studi dikunci per-Kelompok) ──
+  const arahNu = ARAH[kel2] || {karir:[], studi:[]};
+  const useNu  = (typeof LakonNuansa !== 'undefined' && kel2 && kel2 !== '—' && kel2 !== kel1);
+  const karirBlend = useNu
+    ? LakonNuansa.blendList(arahKel.karir, arahNu.karir, kel2, 'id')
+    : { items: arahKel.karir.map(function(x){return {text:x,isNuansa:false};}), secondary: [], label: '' };
+  const studiBlend = useNu
+    ? LakonNuansa.blendList(arahKel.studi, arahNu.studi, kel2, 'id')
+    : { items: arahKel.studi.map(function(x){return {text:x,isNuansa:false};}), secondary: [], label: '' };
+  const NU_TAG = function(lbl){ return ` <span style="font-size:11px;font-weight:600;color:#B07A2E">↗ ${esc(lbl)}</span>`; };
 
   // New sections from app.js — we replicate the data here
   const memimpin1   = raw.dalam_memimpin_1   || '';
@@ -1112,21 +1124,23 @@ async function openReport(idx) {
       <div class="report-section">
         <div class="report-section-h">Arah Karir</div>
         <ul class="rpt-strengths">
-          ${arahKel.karir.map(k=>`<li class="rpt-strength">${esc(k)}</li>`).join('')}
+          ${karirBlend.items.map(it=>`<li class="rpt-strength">${esc(it.text)}${it.isNuansa?NU_TAG(karirBlend.label):''}</li>`).join('')}
         </ul>
+        ${karirBlend.secondary.length?`<div class="report-section-h" style="font-size:11px;color:#B07A2E;margin-top:12px">Dengan pertimbangan ${esc(karirBlend.label)}</div><ul class="rpt-strengths">${karirBlend.secondary.map(k=>`<li class="rpt-strength">${esc(k)}</li>`).join('')}</ul>`:''}
       </div>
       <div class="report-section">
         <div class="report-section-h">Arah Studi</div>
         <ul class="rpt-strengths">
-          ${arahKel.studi.map(k=>`<li class="rpt-strength">${esc(k)}</li>`).join('')}
+          ${studiBlend.items.map(it=>`<li class="rpt-strength">${esc(it.text)}${it.isNuansa?NU_TAG(studiBlend.label):''}</li>`).join('')}
         </ul>
+        ${studiBlend.secondary.length?`<div class="report-section-h" style="font-size:11px;color:#B07A2E;margin-top:12px">Dengan pertimbangan ${esc(studiBlend.label)}</div><ul class="rpt-strengths">${studiBlend.secondary.map(k=>`<li class="rpt-strength">${esc(k)}</li>`).join('')}</ul>`:''}
       </div>
     </div>
 
     <!-- Contoh Peran Ideal dalam Organisasi -->
     <div class="report-section">
       <div class="report-section-h">Contoh Peran Ideal dalam Organisasi</div>
-      ${renderReportPeranIdeal(key)}
+      ${renderReportPeranIdeal(key, kel2, watak)}
     </div>
 
     <!-- Saran Perkembangan -->
@@ -1408,7 +1422,7 @@ function renderReportDims(raw) {
 // ══════════════════════════════════════════════════════════
 // PERAN IDEAL RENDERER — report modal
 // ══════════════════════════════════════════════════════════
-function renderReportPeranIdeal(key) {
+function renderReportPeranIdeal(key, kel2, watak) {
   var PERAN_IDEAL = {
 "Bakti|Reka":{
   naratif:"Di posisi apapun, mereka adalah orang yang membuat lingkungan kerja terasa lebih manusiawi. Kekuatan terbesar mereka bukan pada keahlian teknis tertentu, melainkan pada kemampuan membangun kepercayaan yang tulus dan mendorong pertumbuhan orang lain. Mereka paling efektif ketika diberi ruang untuk benar-benar hadir bagi orang-orang di sekitarnya — dan paling menonjol di peran yang menempatkan pengembangan manusia sebagai inti, bukan sekadar fungsi pendukung.",
@@ -1595,7 +1609,7 @@ function renderReportPeranIdeal(key) {
   posisi:[
     {nama:"Business Analyst / Product Analyst",level:"Mid",fit:"ideal",peran:"Mendiagnosis masalah bisnis atau produk dengan cepat dan menghasilkan rekomendasi yang langsung bisa dieksekusi. Tidak terjebak di analisis yang berlebihan."},
     {nama:"Growth Analyst / Performance Marketer",level:"Mid",fit:"ideal",peran:"Menganalisis funnel dan performa kampanye untuk mengidentifikasi peluang pertumbuhan yang bisa langsung ditindaklanjuti."},
-    {nama:"Management Consultant",level:"Mid–Senior",fit:"ideal",peran:"Mendiagnosis masalah klien dengan cepat dan merancang solusi yang practical. Klien menghargai kecepatan dari analisis ke rekomendasi."},
+    {nama:"Forensic / Investigative Analyst",level:"Mid–Senior",fit:"ideal",peran:"Membongkar kasus, anomali, atau fraud dengan metode investigatif yang cepat dan langsung menghasilkan temuan yang bisa ditindaklanjuti. Dihargai karena kecepatan dari bukti ke kesimpulan."},
     {nama:"Operations Analyst / Process Improvement",level:"Mid",fit:"cocok",peran:"Mengidentifikasi inefisiensi dalam proses operasional dan langsung merancang perbaikan yang bisa diimplementasikan."},
     {nama:"Product Manager",level:"Mid",fit:"cocok",peran:"Mengelola backlog dan prioritas produk berdasarkan data yang solid. Tidak membiarkan roadmap dikuasai oleh opini."},
     {nama:"Healthcare Quality Improvement",level:"Mid",fit:"cocok",peran:"Menganalisis data klinis untuk mengidentifikasi peluang peningkatan kualitas layanan yang bisa langsung diimplementasikan."},
@@ -1653,7 +1667,7 @@ function renderReportPeranIdeal(key) {
 "Tata|Reka":{
   naratif:"Mereka membangun keteraturan bukan karena itu aturannya — tapi karena mereka tahu sistem yang baik adalah yang membuat hal-hal bermakna bisa terjadi secara konsisten. Di posisi apapun, mereka adalah orang yang memastikan visi bisa dieksekusi dengan andal, tanpa kehilangan nilai yang mendasarinya.",
   posisi:[
-    {nama:"Chief of Staff / Head of Operations",level:"Senior",fit:"ideal",peran:"Menerjemahkan visi pemimpin menjadi sistem dan rencana operasional yang konkret. Alasan organisasi bisa bergerak kohesif tanpa micromanagement."},
+    {nama:"Head of Operations / Organizational Development",level:"Senior",fit:"ideal",peran:"Menerjemahkan visi organisasi menjadi sistem dan rencana operasional yang konkret. Alasan organisasi bisa bergerak kohesif tanpa micromanagement."},
     {nama:"Knowledge Management Specialist",level:"Mid",fit:"ideal",peran:"Membangun sistem dokumentasi dan berbagi pengetahuan yang benar-benar digunakan orang. Tidak sekadar mengarsip — memastikan pengetahuan hidup dan accessible."},
     {nama:"Organizational Excellence Manager",level:"Mid–Senior",fit:"ideal",peran:"Memastikan nilai-nilai organisasi tidak hanya terpampang di dinding tapi hidup dalam prosedur dan proses sehari-hari."},
     {nama:"Internal Communications Manager",level:"Mid",fit:"cocok",peran:"Merancang komunikasi internal yang memastikan arah dan nilai organisasi tersampaikan dengan konsisten ke seluruh lapisan."},
@@ -1701,15 +1715,33 @@ function renderReportPeranIdeal(key) {
 };;
   var pd = PERAN_IDEAL[key];
   if (!pd) return '<p class="report-text">—</p>';
-  var rows = pd.posisi.map(function(p) {
+  // ── Nuansa: campur 2 peran dari Kelompok ke-2 (Watak sama) ──
+  var nuPd = (kel2 && watak) ? PERAN_IDEAL[kel2 + '|' + watak] : null;
+  var blendP = (typeof LakonNuansa !== 'undefined' && nuPd && kel2 !== '—' && kel2 !== key.split('|')[0])
+    ? LakonNuansa.blendPeran(pd.posisi, nuPd.posisi, kel2, 'id')
+    : { rows: pd.posisi.map(function(p){return {nama:p.nama,level:p.level,fit:p.fit,peran:p.peran,isNuansa:false};}), secondary: [], label: '' };
+  var rows = blendP.rows.map(function(p) {
     var cls  = p.fit === 'ideal' ? 'ideal' : p.fit === 'cocok' ? 'cocok' : 'bisa';
     var lbl  = p.fit === 'ideal' ? 'Ideal' : p.fit === 'cocok' ? 'Cocok' : 'Bisa';
+    var tag  = p.isNuansa ? ' <span style="font-size:10px;font-weight:600;color:#B07A2E">↗ ' + esc(blendP.label) + '</span>' : '';
     return '<tr class="rpt-peran-row">'
       + '<td class="rpt-peran-td-fit"><span class="rpt-peran-dot rpt-dot-' + cls + '"></span> <span class="rpt-fit-lbl rpt-fit-' + cls + '">' + esc(lbl) + '</span></td>'
-      + '<td class="rpt-peran-td-pos"><div class="rpt-peran-nama">' + esc(p.nama) + '</div><div class="rpt-peran-level">' + esc(p.level) + '</div></td>'
+      + '<td class="rpt-peran-td-pos"><div class="rpt-peran-nama">' + esc(p.nama) + tag + '</div><div class="rpt-peran-level">' + esc(p.level) + '</div></td>'
       + '<td class="rpt-peran-td-desc">' + esc(p.peran) + '</td>'
       + '</tr>';
   }).join('');
+  var secHtml = '';
+  if (blendP.secondary && blendP.secondary.length) {
+    var secRows = blendP.secondary.map(function(p){
+      return '<tr class="rpt-peran-row">'
+        + '<td class="rpt-peran-td-fit"><span class="rpt-peran-dot rpt-dot-cocok"></span></td>'
+        + '<td class="rpt-peran-td-pos"><div class="rpt-peran-nama">' + esc(p.nama) + '</div><div class="rpt-peran-level">' + esc(p.level) + '</div></td>'
+        + '<td class="rpt-peran-td-desc">' + esc(p.peran) + '</td>'
+        + '</tr>';
+    }).join('');
+    secHtml = '<div class="rpt-peran-sub" style="color:#B07A2E;margin-top:14px">Dengan pertimbangan ' + esc(blendP.label) + '</div>'
+      + '<table class="rpt-peran-table"><tbody>' + secRows + '</tbody></table>';
+  }
   return '<p class="rpt-peran-naratif">' + esc(pd.naratif) + '</p>'
     + '<div class="rpt-peran-legend">'
     +   '<span class="rpt-legend-item"><span class="rpt-peran-dot rpt-dot-ideal"></span>Ideal</span>'
@@ -1721,7 +1753,7 @@ function renderReportPeranIdeal(key) {
     +   '<th class="rpt-peran-th-fit"></th>'
     +   '<th class="rpt-peran-th-pos">Posisi</th>'
     +   '<th>Perannya di sini</th>'
-    + '</tr></thead><tbody>' + rows + '</tbody></table>';
+    + '</tr></thead><tbody>' + rows + '</tbody></table>' + secHtml;
 }
 
 // ══════════════════════════════════════════════════════════
