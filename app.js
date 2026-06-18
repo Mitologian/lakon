@@ -1344,7 +1344,7 @@ function showResult(score,serverResult) {
             + '<td class="peran-td-desc">' + p.peran + '</td>'
             + '</tr>';
         }).join('');
-        secHtml = '<div class="peran-sub-label" style="margin-top:16px;color:#7B5A9E">' + (L ? 'Dengan pertimbangan ' : 'Considering ') + blendP.label + '</div>'
+        secHtml = '<div class="peran-sub-label" style="margin-top:16px;color:#7B5A9E">' + (L ? 'Pertimbangan ' : 'Considering ') + blendP.label + '</div>'
           + '<div class="peran-table-wrap"><table class="peran-table"><tbody>' + secRows + '</tbody></table></div>';
       }
       peranEl.innerHTML = '<p class="result-text peran-naratif">' + pd.naratif + '</p>'

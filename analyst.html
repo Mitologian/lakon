@@ -1126,14 +1126,14 @@ async function openReport(idx) {
         <ul class="rpt-strengths">
           ${karirBlend.items.map(it=>`<li class="rpt-strength">${esc(it.text)}${it.isNuansa?NU_TAG(karirBlend.label):''}</li>`).join('')}
         </ul>
-        ${karirBlend.secondary.length?`<div class="report-section-h" style="font-size:11px;color:#B07A2E;margin-top:12px">Dengan pertimbangan ${esc(karirBlend.label)}</div><ul class="rpt-strengths">${karirBlend.secondary.map(k=>`<li class="rpt-strength">${esc(k)}</li>`).join('')}</ul>`:''}
+        ${karirBlend.secondary.length?`<div class="rpt-peran-sub" style="color:#B07A2E;margin-top:20px;margin-bottom:6px">Pertimbangan ${esc(karirBlend.label)}</div><ul class="rpt-strengths">${karirBlend.secondary.map(k=>`<li class="rpt-strength">${esc(k)}</li>`).join('')}</ul>`:''}
       </div>
       <div class="report-section">
         <div class="report-section-h">Arah Studi</div>
         <ul class="rpt-strengths">
           ${studiBlend.items.map(it=>`<li class="rpt-strength">${esc(it.text)}${it.isNuansa?NU_TAG(studiBlend.label):''}</li>`).join('')}
         </ul>
-        ${studiBlend.secondary.length?`<div class="report-section-h" style="font-size:11px;color:#B07A2E;margin-top:12px">Dengan pertimbangan ${esc(studiBlend.label)}</div><ul class="rpt-strengths">${studiBlend.secondary.map(k=>`<li class="rpt-strength">${esc(k)}</li>`).join('')}</ul>`:''}
+        ${studiBlend.secondary.length?`<div class="rpt-peran-sub" style="color:#B07A2E;margin-top:20px;margin-bottom:6px">Pertimbangan ${esc(studiBlend.label)}</div><ul class="rpt-strengths">${studiBlend.secondary.map(k=>`<li class="rpt-strength">${esc(k)}</li>`).join('')}</ul>`:''}
       </div>
     </div>
 
@@ -1739,7 +1739,7 @@ function renderReportPeranIdeal(key, kel2, watak) {
         + '<td class="rpt-peran-td-desc">' + esc(p.peran) + '</td>'
         + '</tr>';
     }).join('');
-    secHtml = '<div class="rpt-peran-sub" style="color:#B07A2E;margin-top:14px">Dengan pertimbangan ' + esc(blendP.label) + '</div>'
+    secHtml = '<div class="rpt-peran-sub" style="color:#B07A2E;margin-top:14px">Pertimbangan ' + esc(blendP.label) + '</div>'
       + '<table class="rpt-peran-table"><tbody>' + secRows + '</tbody></table>';
   }
   return '<p class="rpt-peran-naratif">' + esc(pd.naratif) + '</p>'
