@@ -22,6 +22,8 @@ let pages       = [];
 
 const mbtiAns   = {};
 const pick2Ans  = {};
+const pick2Order = {};   // urutan opsi teracak per soal (stabil per sesi)
+function shuffleArr(a){ for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
 const likertAns = {};
 
 // ─────────────────────────────────────────────────────────────
@@ -876,7 +878,8 @@ function buildPick2(q,num) {
   const qt=lang==='id'?q.id_q:q.en_q;
   const cnt=pick2Ans[q.id]?pick2Ans[q.id].size:0;
   const cntTxt=lang==='id'?`${cnt} / 2 dipilih`:`${cnt} / 2 selected`;
-  const opts=q.opts.map(o=>{
+  const ordered = pick2Order[q.id] || (pick2Order[q.id] = shuffleArr(q.opts.slice()));
+  const opts=ordered.map(o=>{
     const lbl=lang==='id'?o.id:o.en;
     const chk=(pick2Ans[q.id]&&pick2Ans[q.id].has(o.t))?'checked':'';
     return `<div class="pick2-opt">
@@ -895,22 +898,21 @@ function buildPick2(q,num) {
 function buildLikert(q,num) {
   const st=lang==='id'?q.id_s:q.en_s;
   const cur=likertAns[q.id]?.raw;
-  const btns=[1,2,3,4,5].map(v=>{
+  const CAPS=lang==='id'
+    ? ['Sangat Setuju','Setuju','','Tidak Setuju','Sangat Tidak Setuju']
+    : ['Strongly Agree','Agree','','Disagree','Strongly Disagree'];
+  const cols=[1,2,3,4,5].map(v=>{
     const mid=v===3;
     const sel=cur===v?'sel':'';
     const click=mid?'':` onclick="recordLikert('${q.id}','${q.t}',${v},this)"`;
     const tab=mid?' tabindex="-1"':'';
-    return `<button class="lk-btn ${sel}" data-qid="${q.id}" data-val="${v}"${click}${tab}></button>`;
+    const cap=`<span class="lk-cap">${CAPS[v-1]||''}</span>`;
+    return `<div class="lk-col"><button class="lk-btn ${sel}" data-qid="${q.id}" data-val="${v}"${click}${tab}></button>${cap}</div>`;
   }).join('');
-  const ag=lang==='id'?'Setuju':'Agree';
-  const dg=lang==='id'?'Tidak Setuju':'Disagree';
   return `<span class="q-num-label">${num}</span>
 <p class="q-text">${st}</p>
 <div class="likert-scale">
-  <div class="likert-circles">${btns}</div>
-  <div class="likert-labels">
-    <span class="ag">${ag}</span><span>·</span><span class="dg">${dg}</span>
-  </div>
+  <div class="likert-circles">${cols}</div>
 </div>`;
 }
 
